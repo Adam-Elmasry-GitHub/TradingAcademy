@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1250" viewBox="0 0 900 1250" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<rect width="900" height="1250" fill="#F8FAFC"/>
+<text x="450.0" y="52" text-anchor="middle" font-size="30" font-weight="700" fill="#0F172A">Trading Academy Roadmap</text>
+<text x="450.0" y="84" text-anchor="middle" font-size="16" fill="#475569">From beginner to professional trader · pass each quiz (≥ 70%) to unlock the next level</text>
+<defs><marker id="a" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/></marker></defs>
+<rect x="80" y="120" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#4F8EF7" stroke-width="3"/>
+<rect x="80" y="120" width="14" height="92" rx="7" fill="#4F8EF7"/>
+<text x="114" y="154" font-size="20" font-weight="700" fill="#0F172A">Level 0 · Foundations</text>
+<text x="114" y="178" font-size="14" fill="#4F8EF7" font-weight="600">Novice · 2-3 weeks</text>
+<text x="114" y="199" font-size="12.5" fill="#475569">What trading is (and is not), Markets and instruments, How orders w...</text>
+<path d="M340.0,212 C340.0,231.0 560.0,231.0 560.0,246" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="300" y="250" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#2BB3A3" stroke-width="3"/>
+<rect x="300" y="250" width="14" height="92" rx="7" fill="#2BB3A3"/>
+<text x="334" y="284" font-size="20" font-weight="700" fill="#0F172A">Level 1 · Charts and Price Action</text>
+<text x="334" y="308" font-size="14" fill="#2BB3A3" font-weight="600">Apprentice · 3-4 weeks</text>
+<text x="334" y="329" font-size="12.5" fill="#475569">Candlesticks, Trends and market structure, Support and resistance, ...</text>
+<path d="M560.0,342 C560.0,361.0 340.0,361.0 340.0,376" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="80" y="380" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#7A5AF8" stroke-width="3"/>
+<rect x="80" y="380" width="14" height="92" rx="7" fill="#7A5AF8"/>
+<text x="114" y="414" font-size="20" font-weight="700" fill="#0F172A">Level 2 · Technical Analysis</text>
+<text x="114" y="438" font-size="14" fill="#7A5AF8" font-weight="600">Analyst · 4-6 weeks</text>
+<text x="114" y="459" font-size="12.5" fill="#475569">Moving averages, RSI and momentum, MACD, ATR and volatility, Chart ...</text>
+<path d="M340.0,472 C340.0,491.0 560.0,491.0 560.0,506" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="300" y="510" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#E5484D" stroke-width="3"/>
+<rect x="300" y="510" width="14" height="92" rx="7" fill="#E5484D"/>
+<text x="334" y="544" font-size="20" font-weight="700" fill="#0F172A">Level 3 · Risk Management</text>
+<text x="334" y="568" font-size="14" fill="#E5484D" font-weight="600">Risk Manager · 3-4 weeks</text>
+<text x="334" y="589" font-size="12.5" fill="#475569">Why risk comes first, Stop-losses and position sizing, R-multiples ...</text>
+<path d="M560.0,602 C560.0,621.0 340.0,621.0 340.0,636" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="80" y="640" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#F5A524" stroke-width="3"/>
+<rect x="80" y="640" width="14" height="92" rx="7" fill="#F5A524"/>
+<text x="114" y="674" font-size="20" font-weight="700" fill="#0F172A">Level 4 · Fundamental and Macro Analysis</text>
+<text x="114" y="698" font-size="14" fill="#F5A524" font-weight="600">Market Analyst · 4-6 weeks</text>
+<text x="114" y="719" font-size="12.5" fill="#475569">Company fundamentals, Macro: interest rates, inflation and central ...</text>
+<path d="M340.0,732 C340.0,751.0 560.0,751.0 560.0,766" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="300" y="770" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#D6409F" stroke-width="3"/>
+<rect x="300" y="770" width="14" height="92" rx="7" fill="#D6409F"/>
+<text x="334" y="804" font-size="20" font-weight="700" fill="#0F172A">Level 5 · Trading Psychology</text>
+<text x="334" y="828" font-size="14" fill="#D6409F" font-weight="600">Disciplined Trader · Ongoing, start with 4 weeks</text>
+<text x="334" y="849" font-size="12.5" fill="#475569">Cognitive biases, Fear, greed, FOMO and revenge trading, The tradin...</text>
+<path d="M560.0,862 C560.0,881.0 340.0,881.0 340.0,896" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="80" y="900" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#12A594" stroke-width="3"/>
+<rect x="80" y="900" width="14" height="92" rx="7" fill="#12A594"/>
+<text x="114" y="934" font-size="20" font-weight="700" fill="#0F172A">Level 6 · Strategy Development and Backtesting</text>
+<text x="114" y="958" font-size="14" fill="#12A594" font-weight="600">Strategist · 6-8 weeks</text>
+<text x="114" y="979" font-size="12.5" fill="#475569">Anatomy of a strategy, Backtesting properly, Overfitting and other ...</text>
+<path d="M340.0,992 C340.0,1011.0 560.0,1011.0 560.0,1026" fill="none" stroke="#94A3B8" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="300" y="1030" width="520" height="92" rx="16" fill="#FFFFFF" stroke="#111827" stroke-width="3"/>
+<rect x="300" y="1030" width="14" height="92" rx="7" fill="#111827"/>
+<text x="334" y="1064" font-size="20" font-weight="700" fill="#0F172A">Level 7 · Professional Trading</text>
+<text x="334" y="1088" font-size="14" fill="#111827" font-weight="600">Pro · 6-12 months and beyond</text>
+<text x="334" y="1109" font-size="12.5" fill="#475569">Algorithmic trading with C#, Options and derivatives, Portfolio of ...</text>
+<text x="450.0" y="1180" text-anchor="middle" font-size="20" font-weight="700" fill="#0F172A">★ Pro trader: consistent, rule-based, risk-managed, journaled</text>
+</svg>

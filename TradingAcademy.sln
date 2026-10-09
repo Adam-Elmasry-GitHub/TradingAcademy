@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A74F09C0-E674-4833-A327-43BE31F5D367}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingAcademy", "src\TradingAcademy\TradingAcademy.csproj", "{F398FF1C-3A47-4BE2-9298-59D3919D8B31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EA9822D3-9466-4318-9F37-B32DFDBDCE88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingAcademy.Tests", "tests\TradingAcademy.Tests\TradingAcademy.Tests.csproj", "{5373B963-0792-4CFC-A3D1-997D110473AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F398FF1C-3A47-4BE2-9298-59D3919D8B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F398FF1C-3A47-4BE2-9298-59D3919D8B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F398FF1C-3A47-4BE2-9298-59D3919D8B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F398FF1C-3A47-4BE2-9298-59D3919D8B31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5373B963-0792-4CFC-A3D1-997D110473AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5373B963-0792-4CFC-A3D1-997D110473AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5373B963-0792-4CFC-A3D1-997D110473AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5373B963-0792-4CFC-A3D1-997D110473AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F398FF1C-3A47-4BE2-9298-59D3919D8B31} = {A74F09C0-E674-4833-A327-43BE31F5D367}
+		{5373B963-0792-4CFC-A3D1-997D110473AB} = {EA9822D3-9466-4318-9F37-B32DFDBDCE88}
+	EndGlobalSection
+EndGlobal

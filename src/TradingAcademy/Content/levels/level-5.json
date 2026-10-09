@@ -1,0 +1,103 @@
+{
+  "number": 5,
+  "name": "Trading Psychology",
+  "rank": "Disciplined Trader",
+  "duration": "Ongoing, start with 4 weeks",
+  "goal": "Recognise the biases and emotions that make traders break their rules, and build habits that keep you consistent.",
+  "milestones": [
+    "Write a one-page trading plan and follow it for 20 simulator trades.",
+    "Journal every trade with your emotion and one lesson.",
+    "Do a weekly review for 4 weeks in a row."
+  ],
+  "lessons": [
+    {
+      "id": "5.1",
+      "title": "Cognitive biases",
+      "body": [
+        "Loss aversion: losses hurt roughly twice as much as equal gains feel good (Kahneman and Tversky). This makes traders hold losers too long, hoping to get back to break-even, and sell winners too early.",
+        "Confirmation bias: we look for information that supports our position and ignore what contradicts it. Fix: before entering, write what would prove you wrong.",
+        "Recency bias: the last few trades feel more important than the last hundred. Three losses in a row do not mean your strategy stopped working; a few hundred trades might.",
+        "Overconfidence: after a winning streak, traders increase size and break rules. Some of the biggest losses come right after the best weeks."
+      ],
+      "keyTakeaways": [
+        "Loss aversion makes us hold losers and cut winners.",
+        "Define what proves you wrong before entering.",
+        "Judge a strategy on a large sample, not the last few trades."
+      ],
+      "exercise": "Review your journal: find one trade affected by each bias above.",
+      "readMore": [
+        "Daniel Kahneman, 'Thinking, Fast and Slow'",
+        "Mark Douglas, 'Trading in the Zone'"
+      ]
+    },
+    {
+      "id": "5.2",
+      "title": "Fear, greed, FOMO and revenge trading",
+      "body": [
+        "Fear makes you skip valid setups or exit too early. Greed makes you oversize or move your target further away. FOMO (fear of missing out) makes you chase a move that already happened, entering late with a bad stop.",
+        "Revenge trading is trying to win back a loss immediately, usually with bigger size and a worse setup. It is the fastest route to a blown account.",
+        "Practical defences: a maximum number of trades per day, a daily loss limit after which you stop, a mandatory break after two losses in a row, and fixed position sizing calculated before entry.",
+        "Mark Douglas taught thinking in probabilities: any single trade's result is random; only the series matters. When you truly accept that, a loss stops feeling personal."
+      ],
+      "keyTakeaways": [
+        "Name the emotion before you act on it.",
+        "Hard rules (daily loss limit, max trades) beat willpower.",
+        "Each trade is one of the next hundred."
+      ],
+      "exercise": "Add a rule to your plan: 'After 2 losses in a row I stop for the day.' Follow it in the simulator.",
+      "readMore": [
+        "Brett Steenbarger, 'The Daily Trading Coach'",
+        "Jack Schwager, 'Market Wizards' (interviews on discipline)"
+      ]
+    },
+    {
+      "id": "5.3",
+      "title": "The trading plan",
+      "body": [
+        "A trading plan is a written document that answers: what markets and timeframes I trade; my setups with exact entry, stop and exit rules; my risk per trade, per day and per week; when I trade and when I do not; and how I review.",
+        "If a rule cannot be checked as 'followed' or 'not followed', it is not a rule. 'Buy strong stocks' is vague; 'Buy when price closes above the 20-day high while above the 50 SMA' is a rule.",
+        "Your plan turns trading from emotional decisions into executing a process. Your goal each day becomes 'follow the plan', not 'make money'.",
+        "Review and update the plan monthly, based on journal data, not on feelings after one bad day."
+      ],
+      "keyTakeaways": [
+        "Write it down: markets, setups, risk, schedule, review.",
+        "Rules must be objectively checkable.",
+        "Success = following the plan."
+      ],
+      "exercise": "Use docs/templates/TRADING-PLAN.md to write your first plan.",
+      "readMore": [
+        "Alexander Elder, 'The New Trading for a Living' (record keeping and plan)",
+        "Van K. Tharp, 'Trade Your Way to Financial Freedom'"
+      ]
+    },
+    {
+      "id": "5.4",
+      "title": "Journaling and review",
+      "body": [
+        "Professional traders keep detailed records: date, instrument, setup, entry, stop, target, exit, size, result in R, screenshot, emotion and lesson. The Trading journal in this app stores the core of this.",
+        "Weekly review questions: Did I follow my plan? Which setup made money and which lost? Were my losses caused by the market or by mistakes? What one thing will I improve next week?",
+        "Separate good decisions from good outcomes. A trade that followed the plan and lost is a good trade. A trade that broke the rules and won is a bad trade that teaches a dangerous lesson.",
+        "Over months, your journal becomes your best data source: it shows which conditions suit your strategy and where you leak money."
+      ],
+      "keyTakeaways": [
+        "Record every trade, including emotions.",
+        "Judge decisions, not outcomes.",
+        "Weekly reviews compound your improvement."
+      ],
+      "exercise": "Run a weekly review using docs/templates/WEEKLY-REVIEW.md.",
+      "readMore": [
+        "Annie Duke, 'Thinking in Bets'",
+        "Brett Steenbarger, 'Trading Psychology 2.0'"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "Holding a losing trade hoping it returns to break-even is mostly caused by:", "options": ["Loss aversion", "Good risk management", "Recency bias", "Liquidity"], "answer": 0, "explanation": "Losses hurt more than gains please, so we avoid realising them." },
+    { "prompt": "You lose three trades in a row with a tested strategy. The best reaction is:", "options": ["Double size to win it back", "Abandon the strategy", "Follow your plan; check whether the losses broke any rules", "Switch to a different market immediately"], "answer": 2, "explanation": "Short losing streaks are normal. Judge on large samples and process." },
+    { "prompt": "Which of these is a good trading rule?", "options": ["Buy good stocks", "Trade when it feels right", "Buy on a daily close above the 20-day high if price is above the 50 SMA", "Never lose"], "answer": 2, "explanation": "A rule must be objective and checkable." },
+    { "prompt": "A trade broke your rules but made money. It was:", "options": ["A good trade", "A bad decision with a lucky outcome", "Proof the rules are wrong", "Irrelevant"], "answer": 1, "explanation": "Rewarding rule-breaking trains bad habits." },
+    { "prompt": "Revenge trading means:", "options": ["Trading against a rival", "Trying to win back a loss immediately, often with bigger size", "Shorting a stock you dislike", "A legal dispute"], "answer": 1, "explanation": "It is emotional, oversized and usually ends badly." },
+    { "prompt": "Which defence against emotional trading is the strongest?", "options": ["Willpower", "Hard written rules like a daily loss limit", "Watching more news", "Using more indicators"], "answer": 1, "explanation": "Pre-committed rules work when emotions are high; willpower does not." },
+    { "prompt": "FOMO typically leads to:", "options": ["Early, well-planned entries", "Chasing moves late with poor stops", "Lower risk", "Better win rates"], "answer": 1, "explanation": "Fear of missing out makes traders enter after the move, with bad reward-to-risk." }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "number": 2,
+  "name": "Technical Analysis",
+  "rank": "Analyst",
+  "duration": "4-6 weeks",
+  "goal": "Use indicators correctly: moving averages, RSI, MACD, ATR and chart patterns, and understand their limits.",
+  "milestones": [
+    "Explain how SMA, EMA, RSI, MACD and ATR are calculated (the code in Trading/Indicators.cs shows you).",
+    "Define one simple rule-based setup using at most two indicators.",
+    "Track that setup in 5 simulator sessions and log every trade in the journal."
+  ],
+  "lessons": [
+    {
+      "id": "2.1",
+      "title": "Moving averages",
+      "body": [
+        "A simple moving average (SMA) is the average closing price of the last N bars. An exponential moving average (EMA) gives more weight to recent prices, so it reacts faster. Common periods are 20 (short-term), 50 (medium) and 200 (long-term).",
+        "Moving averages smooth noise and show trend direction: price above a rising 50 SMA is a simple definition of an uptrend. The 20 SMA is often used as a pullback zone in strong trends.",
+        "A crossover happens when a faster average crosses a slower one. The 50/200 'golden cross' and 'death cross' are famous, but crossovers lag and give many false signals in sideways markets.",
+        "All moving averages lag price, because they are built from past data. Use them as a filter (only take longs above the 200 SMA) rather than as precise entry triggers."
+      ],
+      "keyTakeaways": [
+        "SMA = equal weights, EMA = more weight on recent prices.",
+        "Moving averages show direction and act as dynamic support/resistance.",
+        "They lag, so they work best as filters."
+      ],
+      "exercise": "In the simulator, the yellow dots are the SMA20. Only take long trades when price is above it and short trades when below. Compare results with a session where you ignore it.",
+      "readMore": [
+        "Investopedia: 'Moving Average (MA): Purpose, Uses, Formula'",
+        "Perry Kaufman, 'Trading Systems and Methods'"
+      ]
+    },
+    {
+      "id": "2.2",
+      "title": "RSI and momentum",
+      "body": [
+        "The Relative Strength Index (RSI), created by J. Welles Wilder, compares the size of recent gains to recent losses on a scale from 0 to 100. The standard period is 14.",
+        "Above 70 is often called overbought and below 30 oversold. But in a strong uptrend RSI can stay above 70 for weeks. Selling only because RSI is high is a classic beginner mistake.",
+        "More robust uses: in an uptrend, buy pullbacks when RSI dips to 40-50 and turns up; watch for divergence, when price makes a new high but RSI makes a lower high, a sign that momentum is fading.",
+        "Momentum indicators measure speed, not direction. Combine them with trend and levels."
+      ],
+      "keyTakeaways": [
+        "RSI ranges 0-100; 70/30 are common thresholds.",
+        "Overbought can stay overbought in a strong trend.",
+        "Divergence warns that momentum is fading."
+      ],
+      "exercise": "Find one bearish divergence in the simulator (higher price high, lower RSI high). What happened next?",
+      "readMore": [
+        "J. Welles Wilder, 'New Concepts in Technical Trading Systems'",
+        "Andrew Cardwell's RSI work (summaries on Investopedia)"
+      ]
+    },
+    {
+      "id": "2.3",
+      "title": "MACD, ATR and volatility",
+      "body": [
+        "MACD is the 12-period EMA minus the 26-period EMA. Its 9-period EMA is the signal line. MACD above the signal line suggests rising momentum; the histogram shows the gap between them.",
+        "Average True Range (ATR) measures how far price typically moves per bar, including gaps. It does not show direction. ATR is one of the most useful tools for risk: a stop placed 1.5 to 2 ATR away is less likely to be hit by normal noise.",
+        "Bollinger Bands put bands two standard deviations around a 20 SMA. Narrow bands (a squeeze) often come before a big move; touching a band is not on its own a signal to buy or sell.",
+        "Volatility changes over time. Professionals size positions smaller when volatility is high, so each trade risks the same amount of money."
+      ],
+      "keyTakeaways": [
+        "MACD = fast EMA - slow EMA, with a signal line.",
+        "ATR measures typical movement: use it for stops and sizing.",
+        "Smaller size when volatility is high."
+      ],
+      "exercise": "In the simulator, use the ATR14 shown under the chart. Place your stop 2 x ATR from entry and size with 'size 1 <stop>'.",
+      "readMore": [
+        "Gerald Appel, 'Technical Analysis: Power Tools for Active Investors' (MACD)",
+        "John Bollinger, 'Bollinger on Bollinger Bands'"
+      ]
+    },
+    {
+      "id": "2.4",
+      "title": "Chart patterns and their limits",
+      "body": [
+        "Classic continuation patterns include flags, pennants and triangles: short pauses in a trend before it continues. Reversal patterns include head and shoulders and double tops/bottoms.",
+        "Patterns are easy to see in hindsight and hard to see in real time. Research such as Thomas Bulkowski's pattern statistics shows that many patterns work only slightly better than chance, and failure rates are high.",
+        "The real value of a pattern is that it defines risk: a flag gives a clear entry (breakout), a clear stop (below the flag) and a measured target. That structure is what makes a trade plan.",
+        "Too many indicators create 'analysis paralysis' and contradictory signals. Pros usually use price, one trend filter and one volatility measure."
+      ],
+      "keyTakeaways": [
+        "Patterns are probabilities, not promises.",
+        "Their main value is a clear entry, stop and target.",
+        "Fewer indicators, clearer decisions."
+      ],
+      "exercise": "Write a one-sentence rule for a flag breakout trade: entry, stop, target and filter.",
+      "readMore": [
+        "Thomas Bulkowski, 'Encyclopedia of Chart Patterns'",
+        "David Aronson, 'Evidence-Based Technical Analysis'"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "What is the main difference between an SMA and an EMA?", "options": ["EMA ignores old prices completely", "EMA gives more weight to recent prices", "SMA uses volume", "They are identical"], "answer": 1, "explanation": "EMA weights recent data more, so it reacts faster than an SMA of the same period." },
+    { "prompt": "RSI has been above 70 for three weeks while price keeps rising. The best interpretation is:", "options": ["Sell immediately", "Strong momentum; overbought can stay overbought", "The indicator is broken", "Volume must be zero"], "answer": 1, "explanation": "In strong trends RSI can stay high. It measures speed, not a top." },
+    { "prompt": "What does ATR measure?", "options": ["Trend direction", "Typical price movement per bar", "Trading volume", "Number of trades"], "answer": 1, "explanation": "Average True Range measures volatility, not direction." },
+    { "prompt": "Price makes a higher high but RSI makes a lower high. This is called:", "options": ["Bullish confirmation", "Bearish divergence", "Golden cross", "A doji"], "answer": 1, "explanation": "Bearish divergence: price rises but momentum fades." },
+    { "prompt": "MACD is calculated as:", "options": ["12 EMA - 26 EMA", "50 SMA - 200 SMA", "RSI x 2", "High - Low"], "answer": 0, "explanation": "Standard MACD = EMA(12) - EMA(26), with a 9-period EMA signal line." },
+    { "prompt": "Why do moving average crossovers give many false signals?", "options": ["They use volume", "They lag and whipsaw in sideways markets", "They are random", "They only work on crypto"], "answer": 1, "explanation": "Averages lag. In ranges, price crosses back and forth, producing losing signals." },
+    { "prompt": "Volatility doubles. A professional keeping the same risk per trade will:", "options": ["Double position size", "Keep the same size", "Roughly halve position size", "Stop using stops"], "answer": 2, "explanation": "Wider stops are needed, so size shrinks to keep money at risk constant." },
+    { "prompt": "The most practical value of a chart pattern is that it:", "options": ["Guarantees the outcome", "Defines entry, stop and target", "Removes the need for risk management", "Predicts news"], "answer": 1, "explanation": "Patterns give a structured trade plan. Their predictive edge is modest." }
+  ]
+}

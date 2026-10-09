@@ -1,0 +1,104 @@
+{
+  "number": 1,
+  "name": "Charts and Price Action",
+  "rank": "Apprentice",
+  "duration": "3-4 weeks",
+  "goal": "Read a price chart: candles, trends, support and resistance, timeframes and volume.",
+  "milestones": [
+    "Mark trend direction and key support/resistance on 20 different charts in TradingView.",
+    "Describe the last 10 candles of any chart in words (who was in control and why).",
+    "Play 3 simulator sessions and write down where you would have entered and exited."
+  ],
+  "lessons": [
+    {
+      "id": "1.1",
+      "title": "Candlesticks",
+      "body": [
+        "A candlestick shows four prices for one period: open, high, low and close (OHLC). The thick body spans open to close. The thin wicks (shadows) show the high and low. A green (bullish) candle closed higher than it opened; a red (bearish) one closed lower.",
+        "Read candles as a story about buyers and sellers. A long body with small wicks means one side was in control all period. A long lower wick means sellers pushed price down but buyers pushed it back up: rejection of lower prices.",
+        "Well-known single-candle signals include the doji (open close to close: indecision), the hammer (long lower wick after a fall: possible reversal up) and the shooting star (long upper wick after a rise: possible reversal down). Two-candle signals include bullish and bearish engulfing.",
+        "Candle patterns alone have weak predictive power. They become useful only in context: at a support or resistance level, in the direction of the trend, with confirmation."
+      ],
+      "keyTakeaways": [
+        "Each candle = open, high, low, close for one period.",
+        "Wicks show rejection, bodies show control.",
+        "Context matters more than the pattern itself."
+      ],
+      "exercise": "In the simulator, find three candles with long lower wicks. Note what happened in the next five candles.",
+      "readMore": [
+        "Steve Nison, 'Japanese Candlestick Charting Techniques'",
+        "Investopedia: 'Understanding a Candlestick Chart'"
+      ]
+    },
+    {
+      "id": "1.2",
+      "title": "Trends and market structure",
+      "body": [
+        "An uptrend is a series of higher highs (HH) and higher lows (HL). A downtrend is lower highs (LH) and lower lows (LL). A range is when price moves sideways between a ceiling and a floor.",
+        "The old saying 'the trend is your friend' exists because trends tend to persist more often than they reverse. Beginners improve fastest by trading only in the direction of the trend on their chosen timeframe.",
+        "A trend change is signalled when structure breaks: in an uptrend, price makes a lower low below the last higher low. That is a warning, not a guarantee; confirm it with the next lower high.",
+        "Markets spend a lot of time in ranges. Trend strategies lose money in ranges and range strategies lose in trends, which is why identifying the current regime is a core skill. The simulator switches between bull, bear and sideways regimes so you can practise this."
+      ],
+      "keyTakeaways": [
+        "Uptrend = HH + HL, downtrend = LH + LL.",
+        "Trade with the trend on your timeframe.",
+        "Know whether the market is trending or ranging before choosing a strategy."
+      ],
+      "exercise": "Draw a chart on paper with five swing points of an uptrend and mark where structure would break.",
+      "readMore": [
+        "John J. Murphy, 'Technical Analysis of the Financial Markets', chapter on trend",
+        "Al Brooks, 'Trading Price Action Trends'"
+      ]
+    },
+    {
+      "id": "1.3",
+      "title": "Support and resistance",
+      "body": [
+        "Support is a price area where buying has stopped falls before; resistance is where selling has stopped rises before. They are zones, not exact lines, because many traders remember them and act there.",
+        "The more times a level has been tested and the more volume traded there, the more important it is. Round numbers (100, 500, 1000) often act as levels too.",
+        "When resistance breaks, it often becomes support (and vice versa). This 'role reversal' gives a classic entry: wait for a breakout, then buy the pullback to the old resistance.",
+        "Levels give you logical places for stops: just beyond the level that proves your idea wrong. If you buy at support, your stop goes below support."
+      ],
+      "keyTakeaways": [
+        "Support and resistance are zones of past decisions.",
+        "Broken resistance often becomes support.",
+        "Use levels to place stops where your idea is proven wrong."
+      ],
+      "exercise": "In a simulator session, before each trade, type the nearest support and resistance into a note. Put your stop beyond one of them.",
+      "readMore": [
+        "Investopedia: 'Support and Resistance Basics'",
+        "TradingView Education: drawing horizontal levels (tradingview.com)"
+      ]
+    },
+    {
+      "id": "1.4",
+      "title": "Timeframes and volume",
+      "body": [
+        "The same market can be in an uptrend on the daily chart and a downtrend on the 15-minute chart. Pick one main timeframe for trading decisions, one higher timeframe for direction and, optionally, one lower timeframe for timing entries. A common swing setup is weekly (direction), daily (decision), 4-hour (timing).",
+        "Higher timeframes contain less noise and fewer false signals. Lower timeframes give more trades, higher costs and more stress. Beginners should start on the daily chart.",
+        "Volume is the number of shares or contracts traded. Rising price on rising volume suggests strong participation; a breakout on weak volume is more likely to fail. Very high volume after a long move can mark exhaustion.",
+        "Volume is reliable for stocks and futures traded on exchanges. In spot forex there is no central volume, so traders use tick volume as a rough proxy."
+      ],
+      "keyTakeaways": [
+        "Use a higher timeframe for direction and your main timeframe for decisions.",
+        "Start on daily charts.",
+        "Volume confirms the strength of a move."
+      ],
+      "exercise": "Open the same stock on weekly, daily and 1-hour charts. Write down the trend on each and whether they agree.",
+      "readMore": [
+        "Alexander Elder, 'The New Trading for a Living' (Triple Screen system)",
+        "Anna Coulling, 'A Complete Guide to Volume Price Analysis'"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "A candle opens at 100, rises to 106, falls to 98 and closes at 104. What is its colour (in standard charting) and the length of its upper wick?", "options": ["Green, wick of 2", "Red, wick of 2", "Green, wick of 6", "Red, wick of 4"], "answer": 0, "explanation": "Close above open = bullish (green). Upper wick = high - close = 106 - 104 = 2." },
+    { "prompt": "What defines an uptrend?", "options": ["Lower highs and lower lows", "Higher highs and higher lows", "Price above 100", "A green candle"], "answer": 1, "explanation": "Market structure: rising swing highs and rising swing lows." },
+    { "prompt": "Price breaks above resistance at 50, then pulls back to 50. What often happens?", "options": ["50 now acts as support", "Price must fall to 0", "The level no longer matters", "The trend reverses for sure"], "answer": 0, "explanation": "Role reversal: broken resistance often becomes support. It is a probability, not a certainty." },
+    { "prompt": "A long lower wick at support usually means:", "options": ["Sellers are in complete control", "Buyers rejected lower prices", "The market is closed", "Volume was zero"], "answer": 1, "explanation": "Price went down but was pushed back up: lower prices were rejected." },
+    { "prompt": "Which timeframe is best for most beginners to make decisions on?", "options": ["1-minute", "5-minute", "Daily", "Tick chart"], "answer": 2, "explanation": "Daily charts give less noise, fewer trades, lower costs and time to think." },
+    { "prompt": "A breakout on very low volume is:", "options": ["More reliable", "More likely to fail", "Impossible", "Always a short signal"], "answer": 1, "explanation": "Weak participation means the move has little fuel behind it." },
+    { "prompt": "Where does a logical stop go when buying at support?", "options": ["Just above resistance", "Exactly at the entry", "Just below the support zone", "No stop is needed"], "answer": 2, "explanation": "Below support is where your idea (support holds) is proven wrong." },
+    { "prompt": "Candle patterns are most useful when:", "options": ["Used alone on any chart", "Combined with context like trend and levels", "Seen on 1-second charts", "They are very rare"], "answer": 1, "explanation": "Patterns on their own have weak predictive power. Context gives them meaning." }
+  ]
+}

@@ -1,0 +1,2 @@
+date,symbol,side,setup,entry,stop,target,exit,quantity,risk_amount,result_r,result_money,followed_plan,emotion,lesson,screenshot
+2026-01-05,SIM,long,pullback to SMA20,100.00,96.00,108.00,107.40,25,100,1.85,185,yes,calm,Waited for the close above the SMA before entering,

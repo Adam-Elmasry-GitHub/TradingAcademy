@@ -1,0 +1,107 @@
+{
+  "number": 0,
+  "name": "Foundations",
+  "rank": "Novice",
+  "duration": "2-3 weeks",
+  "goal": "Understand what markets are, what you can trade, how an order becomes a trade, and what it really costs.",
+  "milestones": [
+    "Explain the difference between trading and investing in your own words.",
+    "Open a demo (paper) account with a broker and place a market, limit and stop order.",
+    "Read the investor education pages from Finanstilsynet or investor.gov."
+  ],
+  "lessons": [
+    {
+      "id": "0.1",
+      "title": "What trading is (and is not)",
+      "body": [
+        "Trading means buying and selling financial instruments to profit from price changes over days, hours or minutes. Investing means buying assets you expect to grow in value over years, usually because the business or economy grows.",
+        "A trader makes money only when they have an edge: a repeatable reason why their trades win more, or win bigger, than they lose. Without an edge, trading is gambling with extra fees.",
+        "Common styles are scalping (seconds to minutes), day trading (closed before the market closes), swing trading (days to weeks) and position trading (weeks to months). Beginners usually learn fastest with swing trading, because decisions are slower and costs are lower.",
+        "Studies of retail traders, including regulators' data on leveraged products, consistently show that most lose money. The aim of this course is to make you part of the minority that survives long enough to become good: protect capital first, profit second."
+      ],
+      "keyTakeaways": [
+        "Trading profits come from an edge, not from activity.",
+        "Swing trading is the friendliest style for learning.",
+        "Survival is the first goal of every trader."
+      ],
+      "exercise": "Write down why you want to trade, how much time per week you have, and how much money you could lose completely without it affecting your life. That last number is your maximum starting capital.",
+      "readMore": [
+        "Investopedia: 'Day Trading vs. Swing Trading' (investopedia.com)",
+        "Finanstilsynet: investor information (finanstilsynet.no)",
+        "SEC / investor.gov: 'Introduction to Investing'"
+      ]
+    },
+    {
+      "id": "0.2",
+      "title": "Markets and instruments",
+      "body": [
+        "Stocks (shares) are ownership in a company and trade on exchanges such as Oslo Børs (Euronext Oslo), NYSE and Nasdaq. ETFs are baskets of stocks or other assets that trade like a single stock; an index ETF is often the best first instrument because it cannot go bankrupt like a single company.",
+        "Forex (FX) is the currency market, quoted in pairs like EUR/USD or USD/NOK. It trades 24 hours a day on weekdays and is usually traded with leverage, which magnifies both gains and losses.",
+        "Futures are contracts to buy or sell an asset at a future date (for example oil, gold or an index). Options give the right, but not the obligation, to buy (call) or sell (put) at a set price. Both are derivatives: their value is derived from another asset. CFDs are broker contracts that mirror a price; they are popular and very risky because of leverage.",
+        "Crypto assets trade around the clock and are extremely volatile. Whatever you trade, learn its trading hours, typical daily move, costs and what moves it."
+      ],
+      "keyTakeaways": [
+        "Start with liquid stocks or index ETFs.",
+        "Derivatives (futures, options, CFDs) add leverage and complexity: leave them for later levels.",
+        "Know the hours, costs and volatility of anything you trade."
+      ],
+      "exercise": "Pick three instruments: one Norwegian stock (e.g. EQNR), one US index ETF (e.g. SPY) and one currency pair (e.g. EUR/NOK). Note their trading hours and average daily percentage move.",
+      "readMore": [
+        "Euronext: 'Understanding the stock market' (euronext.com)",
+        "CME Group Education: 'Introduction to Futures' (cmegroup.com/education)",
+        "BabyPips School of Pipsology: 'Preschool' and 'Kindergarten' (babypips.com)"
+      ]
+    },
+    {
+      "id": "0.3",
+      "title": "How orders work",
+      "body": [
+        "Every market has a bid (the highest price buyers will pay) and an ask (the lowest price sellers will accept). The gap between them is the spread, and you pay it every time you trade at market.",
+        "A market order fills immediately at the best available price. It is certain to fill but the price is not guaranteed; the difference between the expected and actual price is called slippage. A limit order sets the worst price you accept: it controls price but may never fill.",
+        "A stop order becomes a market order when price touches the stop level. A stop-loss is a stop order that closes a losing trade. In fast markets or overnight gaps, a stop can fill worse than its level. A take-profit is a limit order that closes a winning trade.",
+        "Going long means buying first and selling later (profit if price rises). Going short means selling borrowed shares first and buying back later (profit if price falls). The simulator in this app lets you do both."
+      ],
+      "keyTakeaways": [
+        "Market orders guarantee a fill, limit orders guarantee a price.",
+        "Spread and slippage are real costs.",
+        "A stop-loss is your pre-planned exit when you are wrong."
+      ],
+      "exercise": "Open the Paper trading simulator. Buy 10 units, place a stop-loss below the price with 'sl', then advance candles with 'n' until it closes. Then try a short with 's 10'.",
+      "readMore": [
+        "Investopedia: 'Market Order vs. Limit Order'",
+        "investor.gov: 'Types of Orders'"
+      ]
+    },
+    {
+      "id": "0.4",
+      "title": "Brokers, accounts and costs",
+      "body": [
+        "A broker connects you to the market. Choose one that is regulated (in Norway check Finanstilsynet's registry; in the EU, a national regulator under MiFID II), has low costs for what you trade, and offers a free demo account.",
+        "Costs include commission per trade, the spread, currency conversion fees, financing fees for leveraged or overnight positions, and taxes. Small costs repeated hundreds of times can turn a winning strategy into a losing one.",
+        "Taxes differ by country and account type. In Norway, for example, an aksjesparekonto (ASK) lets you defer tax on stocks and equity funds until you withdraw profit, but it does not cover every instrument. Always check current rules with Skatteetaten or a tax professional.",
+        "Leverage lets you control a large position with a small deposit. With 10:1 leverage, a 10% move against you wipes out 100% of your deposit. Beginners should trade without leverage."
+      ],
+      "keyTakeaways": [
+        "Only use regulated brokers.",
+        "Count every cost: commission, spread, FX, financing, tax.",
+        "No leverage until Level 3 is mastered."
+      ],
+      "exercise": "Compare two regulated brokers on: commission for a 10,000 NOK stock trade, currency fee, demo account availability, and which accounts they offer.",
+      "readMore": [
+        "Finanstilsynet: 'Virksomhetsregisteret' (licence lookup)",
+        "Skatteetaten: 'Aksjesparekonto'",
+        "ESMA: warnings on CFDs and leverage (esma.europa.eu)"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "What is the spread?", "options": ["The broker's monthly fee", "The difference between the bid and the ask", "The daily price range", "The tax on profits"], "answer": 1, "explanation": "You pay the spread whenever you buy at the ask and sell at the bid." },
+    { "prompt": "Which order guarantees the price but not the fill?", "options": ["Market order", "Stop order", "Limit order", "Trailing stop"], "answer": 2, "explanation": "A limit order never fills worse than your price, but it may not fill at all." },
+    { "prompt": "You go short 100 shares at 50 and buy them back at 45. Ignoring costs, what is your result?", "options": ["+500", "-500", "+4500", "0"], "answer": 0, "explanation": "Short profit = (sell price - buy price) x quantity = (50 - 45) x 100 = 500." },
+    { "prompt": "With 10:1 leverage, how big a move against you wipes out your whole deposit?", "options": ["1%", "10%", "50%", "100%"], "answer": 1, "explanation": "10x exposure means each 1% move is 10% of your deposit; 10% against you is -100%." },
+    { "prompt": "Which is generally the best first instrument for a beginner?", "options": ["Leveraged crypto futures", "Short-dated options", "A liquid index ETF or large stock", "Penny stocks"], "answer": 2, "explanation": "Liquid, unleveraged, diversified instruments let you learn without being destroyed by volatility or costs." },
+    { "prompt": "What does a trader need to make money consistently?", "options": ["A fast computer", "Lots of trades", "An edge plus risk control", "Insider tips"], "answer": 2, "explanation": "Activity does not create profit. A tested edge with controlled risk does." },
+    { "prompt": "A stop-loss order during a big overnight gap down will usually:", "options": ["Fill exactly at its level", "Fill at the next available price, possibly much worse", "Be cancelled", "Fill at the previous close"], "answer": 1, "explanation": "A stop becomes a market order, so in a gap it fills at the first available price. The simulator models this too." },
+    { "prompt": "Swing trading typically holds positions for:", "options": ["Seconds", "Minutes", "Days to weeks", "Decades"], "answer": 2, "explanation": "Swing traders aim to capture moves lasting a few days to a few weeks." }
+  ]
+}

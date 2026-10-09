@@ -1,0 +1,104 @@
+{
+  "number": 4,
+  "name": "Fundamental and Macro Analysis",
+  "rank": "Market Analyst",
+  "duration": "4-6 weeks",
+  "goal": "Understand what moves markets beyond the chart: company results, interest rates, inflation, news and sentiment.",
+  "milestones": [
+    "Read one quarterly report from a company you follow and summarise it in five lines.",
+    "Follow the economic calendar for a month and note how markets reacted to 3 big releases.",
+    "Explain how Norges Bank and the US Federal Reserve affect NOK and stocks."
+  ],
+  "lessons": [
+    {
+      "id": "4.1",
+      "title": "Company fundamentals",
+      "body": [
+        "A stock's long-term value comes from the company's future cash flows. Key numbers are revenue (sales), earnings (profit), earnings per share (EPS), margins, debt and free cash flow.",
+        "The P/E ratio (price divided by earnings per share) shows how much investors pay for each unit of profit. A high P/E means the market expects growth; a low one can mean value or trouble. Compare P/E within the same industry.",
+        "For traders, earnings reports are volatility events. A stock can gap 10-20% overnight on results. The surprise versus expectations matters more than whether the numbers are 'good'.",
+        "Use fundamentals to choose what to trade (strong companies for longs, weak ones for shorts) and when to avoid holding (just before earnings, unless that is your plan)."
+      ],
+      "keyTakeaways": [
+        "Value comes from future cash flows.",
+        "Markets react to surprises versus expectations.",
+        "Know the earnings dates of everything you hold."
+      ],
+      "exercise": "Find the next earnings date and the analyst EPS estimate for one stock you follow.",
+      "readMore": [
+        "Benjamin Graham, 'The Intelligent Investor'",
+        "Aswath Damodaran's free valuation course (pages.stern.nyu.edu/~adamodar)"
+      ]
+    },
+    {
+      "id": "4.2",
+      "title": "Macro: interest rates, inflation and central banks",
+      "body": [
+        "Central banks (Norges Bank, the ECB, the US Federal Reserve) set short-term interest rates to control inflation. Higher rates make borrowing more expensive, which tends to slow the economy and pressure stock valuations, especially growth stocks.",
+        "Currencies react to interest rate differences. If Norges Bank raises rates more than expected, NOK often strengthens. The US dollar is affected by Fed decisions and is the world's main reserve currency.",
+        "Inflation reports (CPI), employment data (for example US non-farm payrolls) and GDP growth are key macro releases. Markets move on the difference between the actual number and the forecast.",
+        "Norway is closely linked to oil and gas. Oil prices affect Equinor, Aker BP, the Oslo Børs index and the krone. This is called intermarket analysis: how markets influence each other."
+      ],
+      "keyTakeaways": [
+        "Rates up usually means pressure on stocks and support for the currency.",
+        "Markets move on surprises versus forecasts.",
+        "Oil matters a lot for Norwegian markets and NOK."
+      ],
+      "exercise": "Compare a chart of Brent oil with EQNR and USD/NOK over the last year. Describe the relationship.",
+      "readMore": [
+        "Norges Bank: monetary policy reports (norges-bank.no)",
+        "Federal Reserve Education (federalreserveeducation.org)",
+        "Ray Dalio, 'How the Economic Machine Works' (free video)"
+      ]
+    },
+    {
+      "id": "4.3",
+      "title": "News, the economic calendar and sentiment",
+      "body": [
+        "An economic calendar lists scheduled releases with forecasts and previous values. Before trading any day, check it. Spreads widen and price can jump violently around big releases.",
+        "Beginners should not trade the release itself. Either be flat before major news or size down so that a gap through your stop is survivable.",
+        "Sentiment is the mood of market participants. Measures include the VIX ('fear index'), put/call ratios and surveys like the AAII sentiment survey. Extreme fear or greed is often a contrarian signal.",
+        "'Buy the rumour, sell the news': prices often move before an expected event and reverse after it. Ask what is already priced in."
+      ],
+      "keyTakeaways": [
+        "Check the economic calendar every trading day.",
+        "Avoid or size down around major news.",
+        "Extreme sentiment often marks turning points."
+      ],
+      "exercise": "Pick one high-impact release this month. Write your expectation, then compare it with the actual move.",
+      "readMore": [
+        "Investing.com or ForexFactory economic calendar",
+        "CBOE: 'VIX Index' education pages (cboe.com)"
+      ]
+    },
+    {
+      "id": "4.4",
+      "title": "Combining fundamentals and technicals",
+      "body": [
+        "Fundamentals answer 'what' and 'why'; technicals answer 'when' and 'where'. A powerful approach is to choose instruments with a fundamental reason to move, then use the chart to time entries and set stops.",
+        "Example: a company beats earnings and raises guidance (fundamental catalyst). Price gaps up and then consolidates in a flag (technical structure). You buy the breakout with a stop below the flag.",
+        "Relative strength: compare a stock to its index. Stocks that hold up when the market falls often lead when it rises. This is the basis of many professional momentum strategies.",
+        "Keep a top-down view: global macro, then sector, then individual instrument. Trade in the direction where all three agree."
+      ],
+      "keyTakeaways": [
+        "Fundamentals for what to trade, technicals for when.",
+        "Relative strength reveals leaders.",
+        "Best trades have macro, sector and chart aligned."
+      ],
+      "exercise": "Build a watchlist of 10 stocks that are stronger than their index over the last 3 months.",
+      "readMore": [
+        "William O'Neil, 'How to Make Money in Stocks' (CAN SLIM)",
+        "Mark Minervini, 'Trade Like a Stock Market Wizard'"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "A company reports profit up 20%, but analysts expected 35%. The stock most likely:", "options": ["Rises because profit grew", "Falls because results missed expectations", "Does not move", "Is delisted"], "answer": 1, "explanation": "Markets react to the surprise versus expectations, not the raw number." },
+    { "prompt": "Norges Bank raises rates more than expected. The usual first reaction of NOK is:", "options": ["Weaken", "Strengthen", "No effect", "Trading halts"], "answer": 1, "explanation": "Higher rates attract capital, often strengthening the currency." },
+    { "prompt": "What does a P/E ratio of 30 mean?", "options": ["The stock costs 30 NOK", "Investors pay 30 times annual earnings per share", "The company has 30% margin", "30 analysts cover it"], "answer": 1, "explanation": "P/E = price / earnings per share." },
+    { "prompt": "Which is a sensible beginner rule around major news releases?", "options": ["Use maximum leverage", "Be flat or size down", "Remove all stops", "Trade only the first second"], "answer": 1, "explanation": "Gaps and wide spreads can make stops fill far away from their level." },
+    { "prompt": "The VIX is often called:", "options": ["The oil index", "The fear index", "The interest rate", "The Norwegian index"], "answer": 1, "explanation": "It measures expected volatility of the S&P 500 implied by options prices." },
+    { "prompt": "Why are Norwegian stocks and NOK sensitive to oil prices?", "options": ["Norway has no oil", "Oil and gas are a large part of Norway's economy and stock market", "Oil is priced in NOK", "It is random"], "answer": 1, "explanation": "Energy companies are big on Oslo Børs and petroleum exports affect the krone." },
+    { "prompt": "In a top-down approach, the order is:", "options": ["Stock, then sector, then macro", "Macro, then sector, then stock", "Only the chart", "Only news"], "answer": 1, "explanation": "Start with the big picture and narrow down." }
+  ]
+}

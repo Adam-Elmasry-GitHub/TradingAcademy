@@ -1,0 +1,103 @@
+{
+  "number": 6,
+  "name": "Strategy Development and Backtesting",
+  "rank": "Strategist",
+  "duration": "6-8 weeks",
+  "goal": "Turn ideas into precise rules, test them honestly on historical data, and know how to tell a real edge from luck.",
+  "milestones": [
+    "Write one complete strategy with entry, exit, stop, sizing and filter rules.",
+    "Backtest it on at least 100 trades of history (manually or in code).",
+    "Forward test it on paper for at least 1-2 months and compare with the backtest."
+  ],
+  "lessons": [
+    {
+      "id": "6.1",
+      "title": "Anatomy of a strategy",
+      "body": [
+        "A complete strategy has: a market and timeframe; a setup filter (when the strategy is allowed to trade, e.g. only above the 200 SMA); an entry trigger; an initial stop; exit rules (target, trailing stop or time exit); and position sizing.",
+        "Every strategy should have a reason it might work. Common edges come from trend persistence (momentum), mean reversion (prices returning to an average after extreme moves), volatility expansion after contraction, or behavioural patterns around events.",
+        "Simple strategies tend to be more robust than complex ones. A system with three rules that works across many markets is more trustworthy than one with fifteen rules tuned to one stock.",
+        "Example trend strategy: on daily charts, if the close is above the 50 SMA and makes a new 20-day high, buy; initial stop 2 ATR below entry; exit on a close below the 20 SMA; risk 1% per trade."
+      ],
+      "keyTakeaways": [
+        "Strategy = filter + entry + stop + exit + sizing.",
+        "Know why the edge should exist.",
+        "Simple and robust beats complex and fragile."
+      ],
+      "exercise": "Write the example trend strategy above into your trading plan and trade it in the simulator for 3 sessions.",
+      "readMore": [
+        "Andreas Clenow, 'Following the Trend'",
+        "Robert Carver, 'Systematic Trading'"
+      ]
+    },
+    {
+      "id": "6.2",
+      "title": "Backtesting properly",
+      "body": [
+        "A backtest applies your exact rules to historical data to see how they would have performed. It can be manual (scrolling a chart bar by bar) or automated in code.",
+        "Include realistic costs: commission, spread and slippage. Many strategies that look great without costs lose money with them, especially on short timeframes.",
+        "You need enough trades for the result to mean something: at least 100 is a common rule of thumb, across different market conditions (bull, bear, sideways).",
+        "Key output metrics: total return, max drawdown, win rate, average win/loss, profit factor, expectancy, number of trades and the Sharpe ratio (return divided by volatility)."
+      ],
+      "keyTakeaways": [
+        "Test exact rules, include all costs.",
+        "100+ trades across different regimes.",
+        "Look at drawdown, not only return."
+      ],
+      "exercise": "Manually backtest your strategy on one stock: scroll the daily chart from 3 years ago and record 30 trades in a spreadsheet.",
+      "readMore": [
+        "Ernest P. Chan, 'Quantitative Trading'",
+        "QuantConnect documentation and Bootcamp (quantconnect.com)"
+      ]
+    },
+    {
+      "id": "6.3",
+      "title": "Overfitting and other traps",
+      "body": [
+        "Overfitting (curve fitting) means tuning parameters until a strategy fits past noise. It looks perfect on history and fails live. Warning signs: many parameters, results that collapse if a parameter changes slightly, and very few trades.",
+        "Look-ahead bias means using information that would not have been available at the time, for example using today's close to decide to buy at today's open.",
+        "Survivorship bias means testing only on companies that still exist today, ignoring those that went bankrupt or were delisted. It makes results look better than reality.",
+        "Defences: keep an out-of-sample period you never touch while developing; use walk-forward testing; test on several markets; prefer parameters in a stable 'plateau' rather than one perfect value."
+      ],
+      "keyTakeaways": [
+        "If small parameter changes destroy results, it is overfit.",
+        "Never use future information in a test.",
+        "Always keep untouched out-of-sample data."
+      ],
+      "exercise": "Take any indicator setting you like (e.g. SMA 20). Test 15, 20 and 25. If results change drastically, your edge is fragile.",
+      "readMore": [
+        "Marcos López de Prado, 'Advances in Financial Machine Learning'",
+        "David Aronson, 'Evidence-Based Technical Analysis'"
+      ]
+    },
+    {
+      "id": "6.4",
+      "title": "From paper to live",
+      "body": [
+        "After a backtest, forward test (paper trade) the strategy in real time. This tests whether you can execute it and whether the edge still exists in current markets.",
+        "Compare forward results with the backtest. Similar win rate, average R and drawdown are a good sign. A big gap means something is wrong: costs, execution or overfitting.",
+        "Go live with small size, for example a quarter of your planned risk. The goal is to experience real emotions with real money while mistakes are cheap. Increase size step by step only after a set number of trades that match expectations.",
+        "Define in advance when you will stop trading a strategy: for example if drawdown exceeds 1.5 times the worst backtest drawdown."
+      ],
+      "keyTakeaways": [
+        "Backtest, then paper trade, then small live, then scale.",
+        "Compare live results to the backtest.",
+        "Pre-define when to switch a strategy off."
+      ],
+      "exercise": "Write your scaling plan: how many trades at each size before increasing, and your 'switch off' drawdown.",
+      "readMore": [
+        "Alpaca paper trading API docs (alpaca.markets)",
+        "Interactive Brokers paper trading account (interactivebrokers.com)"
+      ]
+    }
+  ],
+  "quiz": [
+    { "prompt": "A backtest shows 300% return with 8 trades and 12 optimised parameters. This is most likely:", "options": ["A great strategy", "Overfit and unreliable", "Survivorship bias only", "Ready to trade with full size"], "answer": 1, "explanation": "Few trades plus many parameters is the classic overfitting signature." },
+    { "prompt": "Using the day's closing price to decide to buy at that day's open is:", "options": ["Look-ahead bias", "Survivorship bias", "Slippage", "Good practice"], "answer": 0, "explanation": "You could not know the close at the open." },
+    { "prompt": "Testing only on today's index members ignores delisted companies. This is:", "options": ["Curve fitting", "Survivorship bias", "Look-ahead bias", "Mean reversion"], "answer": 1, "explanation": "Failed companies are missing, so results look better than reality." },
+    { "prompt": "What is the purpose of out-of-sample data?", "options": ["To make the backtest longer", "To test the strategy on data not used to build it", "To include costs", "To remove losing trades"], "answer": 1, "explanation": "It checks whether the edge holds on unseen data." },
+    { "prompt": "After a good backtest and good paper trading, the next step is:", "options": ["Go live with full size", "Go live with small size and scale up gradually", "Add more parameters", "Stop testing"], "answer": 1, "explanation": "Small live trading tests execution and emotions while mistakes are cheap." },
+    { "prompt": "Which is NOT part of a complete strategy?", "options": ["Entry trigger", "Initial stop", "Position sizing", "A guarantee of profit"], "answer": 3, "explanation": "No strategy guarantees profit. It defines rules and risk." },
+    { "prompt": "The Sharpe ratio measures:", "options": ["Number of trades", "Return relative to volatility", "Maximum leverage", "Commission paid"], "answer": 1, "explanation": "Higher Sharpe means more return per unit of risk (volatility)." }
+  ]
+}
