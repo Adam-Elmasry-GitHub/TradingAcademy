@@ -1,0 +1,28 @@
+@page "/learn"
+@inherits ProgressPage
+
+<PageTitle>Lessons · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">Curriculum</div>
+    <h1>Lessons</h1>
+    <p>@Curriculum.TotalLessons lessons across @Curriculum.Levels.Count levels. Every lesson can be read at any time; quizzes unlock in order.</p>
+</div>
+
+<div class="grid grid-2">
+    @foreach (var level in Curriculum.Levels)
+    {
+        var status = LevelStatus(level);
+        var done = LessonsDone(level);
+        <a class="card card-link fade-in" href="learn/@level.Number">
+            <div class="level-card-head">
+                <div class="eyebrow">Level @level.Number · @level.Rank</div>
+                <span class="chip chip-@status">@(status switch { "done" => "Completed", "open" => "Open", _ => "Locked" })</span>
+            </div>
+            <h3 style="font-size:1.2rem;margin-top:0.35rem">@level.Name</h3>
+            <p class="muted small" style="min-height:3em">@level.Goal</p>
+            <div class="progress-track"><div class="progress-fill @(done == level.Lessons.Count ? "done" : "")" style="width:@Pct(100.0 * done / level.Lessons.Count)%"></div></div>
+            <div class="row spread small muted" style="margin-top:0.5rem"><span>@done / @level.Lessons.Count lessons</span><span>@level.Duration</span></div>
+        </a>
+    }
+</div>

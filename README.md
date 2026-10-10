@@ -4,13 +4,18 @@
 
 **Learn trading from absolute beginner to professional, in a C# console app.**
 
-Trading Academy is a free, open-source learning app written in C# (.NET 8). It combines a drawn **8-level roadmap**, **32 lessons**, **60 quiz questions**, a **paper-trading simulator** with live charts and indicators, a **trader's toolkit** of risk calculators, and a **trading journal**. Next to the app, the [`docs`](docs) folder contains a study guide for every level, a reading list of the best books and free courses, a glossary and ready-to-use templates.
+Trading Academy is a free, open-source learning app written in C# (.NET 8). It comes as a **modern, responsive web app** (Blazor) and as a **console app**, both built on the same core library. It combines a drawn **8-level roadmap**, **32 lessons**, **60 quiz questions**, a **paper-trading simulator** with live charts and indicators, a **trader's toolkit** of risk calculators, and a **trading journal**. Next to the app, the [`docs`](docs) folder contains a study guide for every level, a reading list of the best books and free courses, a glossary and ready-to-use templates.
 
 The idea is simple: **learn → test → practise → review**, one level at a time. You unlock the next level by passing the quiz for the current one, and you practise every skill with fake money before real money is ever involved.
 
 > ⚠️ **Educational use only. Nothing here is financial advice.** Trading involves substantial risk, and most retail traders lose money. Never trade with money you cannot afford to lose.
 
-![Roadmap](docs/roadmap.svg)
+![Trading Academy web app](docs/screenshots/home.png)
+
+<p align="center">
+  <img src="docs/screenshots/simulator.png" width="68%" alt="Paper trading simulator" />
+  <img src="docs/screenshots/mobile-quiz.png" width="24%" alt="Quiz on a phone, light mode" />
+</p>
 
 ---
 
@@ -18,6 +23,7 @@ The idea is simple: **learn → test → practise → review**, one level at a t
 
 - [Features](#features)
 - [Quick start](#quick-start)
+- [The web app](#the-web-app)
 - [The roadmap](#the-roadmap)
 - [How to use the app](#how-to-use-the-app)
 - [Paper trading simulator](#paper-trading-simulator)
@@ -50,12 +56,29 @@ The idea is simple: **learn → test → practise → review**, one level at a t
 ```bash
 git clone https://github.com/Adam-Elmasry-GitHub/TradingAcademy.git
 cd TradingAcademy
+
+# Web app (recommended): then open the address it prints, e.g. http://localhost:5000
+dotnet run --project src/TradingAcademy.Web
+
+# Console app
 dotnet run --project src/TradingAcademy
 ```
 
-Tip: use a terminal at least 120 characters wide (Windows Terminal, the VS Code terminal, macOS Terminal or any Linux terminal) so the charts fit.
+For the console app, use a terminal at least 120 characters wide so the charts fit.
 
-To open it in Visual Studio or Rider, open `TradingAcademy.sln` and press Run.
+To open it in Visual Studio or Rider, open `TradingAcademy.sln`, choose `TradingAcademy.Web` (or `TradingAcademy`) as the startup project and press Run.
+
+## The web app
+
+A Blazor Server app with a hand-made design system: no CSS framework, no JavaScript libraries.
+
+| | |
+|---|---|
+| **Responsive** | Sidebar navigation on desktop, a top bar with a slide-in menu on phones and tablets. Cards, grids and the simulator layout reflow from 4K screens down to 360 px phones. On phones the price chart scrolls sideways and starts at the newest candles. |
+| **Dark and light themes** | Follows your system setting, with a one-click toggle that is remembered. Every colour is a design token. |
+| **Interactive SVG chart** | Candlesticks, SMA 20/50, an RSI panel, a live price tag, and your entry, stop and target drawn on the chart. |
+| **Your progress stays in your browser** | Lessons, quiz scores, simulator stats and journal entries are saved in the browser's local storage. No account, nothing sent to a server. |
+| **Pages** | Home dashboard · Roadmap timeline · Lessons and a lesson reader · Quizzes with instant feedback and a score ring · Paper-trading simulator with order ticket, risk-based sizing and session report · Toolkit with live calculators · Trading journal · Progress |
 
 ## The roadmap
 
@@ -73,6 +96,8 @@ To open it in Visual Studio or Rider, open `TradingAcademy.sln` and press Run.
 The full roadmap, with a Mermaid diagram, the three phases, a weekly routine, rules for day one and the pro checklist, is in **[docs/ROADMAP.md](docs/ROADMAP.md)**. Each level has its own week-by-week study guide in **[docs/levels](docs/levels)**.
 
 ## How to use the app
+
+The web app has the same sections as the console menu below, in the sidebar.
 
 ```
 ══════════════════════════════════════════════════
@@ -99,7 +124,7 @@ A good study loop for each level:
 4. Log your best and worst trade in the **Trading journal**.
 5. Take the **Quiz**. Pass with 70% to unlock the next level; otherwise review and retry (questions are shuffled).
 
-Progress is saved automatically to `progress.json` in your user application data folder (`%APPDATA%\TradingAcademy` on Windows, `~/.config/TradingAcademy` on Linux and macOS). You can reset it from the Progress screen.
+In the web app, progress is saved in your browser. In the console app, progress is saved automatically to `progress.json` in your user application data folder (`%APPDATA%\TradingAcademy` on Windows, `~/.config/TradingAcademy` on Linux and macOS). You can reset it from the Progress screen.
 
 ## Paper trading simulator
 
@@ -121,6 +146,8 @@ Progress is saved automatically to `progress.json` in your user application data
 ```
 
 You start with **10,000** in fake money and trade **150 candles**. The market is generated by geometric Brownian motion that switches between **bull, bear and sideways regimes**, so you meet trends, pullbacks and choppy ranges. Enter a **seed** to replay the same market or challenge a friend on identical prices.
+
+In the web app these are buttons and fields in the order ticket. In the console app you type commands:
 
 | Command | Action |
 |---|---|
@@ -165,10 +192,18 @@ Core reading list: Murphy, *Technical Analysis of the Financial Markets* · Thar
 ```
 TradingAcademy/
 ├── TradingAcademy.sln
-├── src/TradingAcademy/
+├── src/TradingAcademy.Web/        modern responsive web app (Blazor Server)
+│   ├── Components/Layout/         app shell: sidebar, mobile menu, theme toggle
+│   ├── Components/Pages/          home, roadmap, lessons, quiz, simulator, tools, journal, progress
+│   ├── Components/Shared/         icons, SVG candlestick chart, helpers
+│   ├── Services/                  curriculum, per-visitor progress (localStorage), simulator session
+│   └── wwwroot/app.css            the design system (tokens, dark/light themes, responsive layout)
+├── src/TradingAcademy/            console app
 │   ├── Program.cs                 entry point
 │   ├── App.cs                     main menu and navigation
-│   ├── Content/levels/            the curriculum: one JSON file per level (lessons + quiz)
+│   └── UI/                        console screens (roadmap, lessons, quiz, simulator, tools, journal)
+├── src/TradingAcademy.Core/       shared logic used by both apps and the tests
+│   ├── Content/levels/            the curriculum: one JSON file per level (lessons + quiz), embedded in the assembly
 │   ├── Learning/
 │   │   ├── Curriculum.cs          level/lesson/quiz models and JSON loader
 │   │   ├── QuizEngine.cs          scoring, pass mark, shuffling
@@ -179,8 +214,8 @@ TradingAcademy/
 │   │   ├── Indicators.cs          SMA, EMA, RSI, MACD, ATR
 │   │   ├── PaperAccount.cs        orders, fills, stops, P/L and session statistics
 │   │   ├── RiskCalculator.cs      position sizing, expectancy, Kelly, drawdown maths
+│   │   ├── SessionCoach.cs        coaching notes for the session report
 │   │   └── AsciiChart.cs          candlestick chart for the terminal
-│   └── UI/                        console screens (roadmap, lessons, quiz, simulator, tools, journal)
 ├── tests/TradingAcademy.Tests/    xUnit tests for the maths, simulator, account and content
 ├── docs/                          roadmap, study guides, sources, glossary, templates
 └── .github/workflows/build.yml    CI: build and test on every push
@@ -188,8 +223,9 @@ TradingAcademy/
 
 ## How it works (for developers)
 
-- **No external dependencies** in the app; only the .NET base library. Tests use xUnit.
-- **Content is data.** Lessons and quizzes live in `Content/levels/level-N.json`, so you can add or fix material without touching code. The loader validates every quiz answer index on startup.
+- **No external dependencies**: only .NET and ASP.NET Core. Tests use xUnit.
+- **One core, two front ends.** All trading maths, the simulator and the curriculum live in `TradingAcademy.Core`. The web and console apps only handle presentation.
+- **Content is data.** Lessons and quizzes live in `src/TradingAcademy.Core/Content/levels/level-N.json`, so you can add or fix material without touching code. The loader validates every quiz answer index on startup.
 - **The trading engine is plain, testable C#.** `PaperAccount` uses `decimal` for money and keeps a signed position (positive = long, negative = short), a volume-weighted average price, realised trades and an equity curve. `MarketSimulator` is deterministic for a given seed.
 - **Indicators** are implemented from their textbook definitions (Wilder smoothing for RSI and ATR), and are a good way to learn how they really work. Level 7 asks you to build an automated strategy on top of them.
 

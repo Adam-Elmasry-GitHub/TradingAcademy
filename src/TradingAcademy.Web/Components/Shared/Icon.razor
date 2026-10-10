@@ -1,0 +1,40 @@
+@* Line icons drawn in the style of the open-source Lucide set (24x24, stroke based). *@
+<svg class="icon @Class" width="@Size" height="@Size" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    @switch (Name)
+    {
+        case "home": <path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /><path d="M10 21v-6h4v6" /> break;
+        case "map": <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" /><path d="M9 4v14" /><path d="M15 6v14" /> break;
+        case "book": <path d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5v-2Z" /><path d="M8 7h8" /><path d="M8 11h6" /> break;
+        case "quiz": <circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14" /><path d="M12 17.5h.01" /> break;
+        case "candles": <path d="M7 3v4" /><rect x="5" y="7" width="4" height="8" rx="1" /><path d="M7 15v6" /><path d="M17 3v3" /><rect x="15" y="6" width="4" height="6" rx="1" /><path d="M17 12v9" /> break;
+        case "calculator": <rect x="5" y="2.5" width="14" height="19" rx="2" /><path d="M8 6.5h8" /><path d="M8 11h.01M12 11h.01M16 11h.01M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 18h.01M12 18h.01M16 18h.01" /> break;
+        case "notebook": <rect x="5" y="3" width="15" height="18" rx="2" /><path d="M3 7h4M3 12h4M3 17h4" /><path d="M10 8h6M10 12h6" /> break;
+        case "trophy": <path d="M8 21h8M12 17v4" /><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" /><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3" /> break;
+        case "chart": <path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 6-7" /> break;
+        case "sun": <circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /> break;
+        case "moon": <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" /> break;
+        case "menu": <path d="M4 6h16M4 12h16M4 18h16" /> break;
+        case "x": <path d="M18 6 6 18M6 6l12 12" /> break;
+        case "check": <path d="m5 12.5 4.5 4.5L19 7.5" /> break;
+        case "lock": <rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /> break;
+        case "play": <path d="M7 4.5v15l12-7.5-12-7.5Z" /> break;
+        case "arrow-right": <path d="M5 12h14M13 6l6 6-6 6" /> break;
+        case "arrow-left": <path d="M19 12H5M11 6l-6 6 6 6" /> break;
+        case "shield": <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6L12 3Z" /><path d="m9 12 2 2 4-4" /> break;
+        case "brain": <path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V6a2 2 0 0 0-3-2Z" /><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1" /> break;
+        case "target": <circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /> break;
+        case "sparkles": <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Z" /><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" /> break;
+        case "refresh": <path d="M20 11a8 8 0 0 0-14.3-4.9L4 8" /><path d="M4 4v4h4" /><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16" /><path d="M20 20v-4h-4" /> break;
+        case "flag": <path d="M5 21V4" /><path d="M5 4h11l-2 4 2 4H5" /> break;
+        case "link": <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" /><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" /> break;
+        case "trash": <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /> break;
+        default: <circle cx="12" cy="12" r="9" /> break;
+    }
+</svg>
+
+@code {
+    [Parameter, EditorRequired] public string Name { get; set; } = "";
+    [Parameter] public int Size { get; set; } = 20;
+    [Parameter] public string? Class { get; set; }
+}

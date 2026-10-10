@@ -55,7 +55,7 @@ Moving a stop further away to avoid a loss is one of the most destructive habits
 - Units = account x risk% / distance to stop.
 - Never widen a stop once in a trade.
 
-**Practice:** Use 'size 1 <stop>' in the simulator before every trade in a full session.
+**Practice:** Use the simulator's risk-based position size (1% risk) before every trade in a full session.
 
 **Read more:** Investopedia: 'Position Sizing in Trading'; Curtis Faith, 'Way of the Turtle' (volatility-based sizing)
 

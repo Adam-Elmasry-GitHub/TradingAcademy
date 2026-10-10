@@ -77,7 +77,7 @@ Volatility changes over time. Professionals size positions smaller when volatili
 - ATR measures typical movement: use it for stops and sizing.
 - Smaller size when volatility is high.
 
-**Practice:** In the simulator, use the ATR14 shown under the chart. Place your stop 2 x ATR from entry and size with 'size 1 <stop>'.
+**Practice:** In the simulator, use the ATR14 shown under the chart. Place your stop 2 x ATR from entry and use the risk-based position size (1% risk).
 
 **Read more:** Gerald Appel, 'Technical Analysis: Power Tools for Active Investors' (MACD); John Bollinger, 'Bollinger on Bollinger Bands'
 

@@ -1,0 +1,117 @@
+@page "/journal"
+@inherits ProgressPage
+
+<PageTitle>Trading journal · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">Review to improve</div>
+    <h1>Trading journal</h1>
+    <p>Professionals record every trade. Log your paper trades here, including how you felt, and look for patterns.</p>
+</div>
+
+<div class="grid grid-4">
+    <div class="card stat"><span class="stat-label">Trades logged</span><span class="stat-value">@Entries.Count</span></div>
+    <div class="card stat"><span class="stat-label">Win rate</span><span class="stat-value">@(Entries.Count == 0 ? "–" : $"{100.0 * Entries.Count(e => e.ProfitLoss > 0) / Entries.Count:0}%")</span></div>
+    <div class="card stat"><span class="stat-label">Total P/L</span><span class="stat-value @Num.Css(Entries.Sum(e => e.ProfitLoss))">@Num.Signed(Entries.Sum(e => e.ProfitLoss))</span></div>
+    <div class="card stat"><span class="stat-label">Best setup</span><span class="stat-value" style="font-size:1.1rem">@(BestSetup ?? "–")</span></div>
+</div>
+
+<div class="section grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));align-items:start">
+    <div class="card stack">
+        <h2>New entry</h2>
+        <div class="grid grid-2" style="gap:0.6rem">
+            <div class="field"><label>Symbol</label><input class="input" placeholder="EQNR, AAPL, SIM" @bind="_symbol" /></div>
+            <div class="field">
+                <label>Side</label>
+                <div class="segmented">
+                    <button class="@(_side == "long" ? "active" : "")" @onclick='() => _side = "long"'>Long</button>
+                    <button class="@(_side == "short" ? "active" : "")" @onclick='() => _side = "short"'>Short</button>
+                </div>
+            </div>
+            <div class="field"><label>Quantity</label><input class="input mono" inputmode="decimal" @bind="_qty" /></div>
+            <div class="field"><label>Setup</label><input class="input" placeholder="Pullback to SMA20" @bind="_setup" /></div>
+            <div class="field"><label>Entry price</label><input class="input mono" inputmode="decimal" @bind="_entry" /></div>
+            <div class="field"><label>Exit price</label><input class="input mono" inputmode="decimal" @bind="_exit" /></div>
+        </div>
+        <div class="field">
+            <label>How did you feel?</label>
+            <div class="row" style="gap:0.4rem">
+                @foreach (var emotion in Emotions)
+                {
+                    <button class="chip @(_emotion == emotion ? "chip-open" : "")" style="cursor:pointer" @onclick="() => _emotion = emotion">@emotion</button>
+                }
+            </div>
+        </div>
+        <div class="field"><label>What did you learn?</label><textarea class="input" @bind="_lesson"></textarea></div>
+        @if (_error is not null) { <span class="down small">@_error</span> }
+        <button class="btn btn-primary" @onclick="Add">Save entry</button>
+    </div>
+
+    <div class="stack">
+        @if (Entries.Count == 0)
+        {
+            <div class="card empty-state">
+                <div class="stat-icon" style="margin:0 auto 0.75rem"><Icon Name="notebook" /></div>
+                <h3>No trades yet</h3>
+                <p class="muted small">Play a simulator session and log your best and worst trade.</p>
+                <a class="btn btn-ghost btn-sm" href="simulator">Open simulator</a>
+            </div>
+        }
+        @foreach (var e in Entries.AsEnumerable().Reverse())
+        {
+            <div class="card fade-in">
+                <div class="row spread">
+                    <div class="row" style="gap:0.5rem">
+                        <strong>@e.Symbol</strong>
+                        <span class="chip @(e.Side == "long" ? "chip-done" : "chip-down")">@e.Side</span>
+                        <span class="chip">@e.Setup</span>
+                    </div>
+                    <strong class="mono @Num.Css(e.ProfitLoss)">@Num.Signed(e.ProfitLoss)</strong>
+                </div>
+                <div class="muted small mono" style="margin:0.4rem 0">@e.Date.ToString("yyyy-MM-dd") · @e.Quantity × @Num.Money(e.Entry) → @Num.Money(e.Exit)</div>
+                @if (!string.IsNullOrWhiteSpace(e.Lesson) || !string.IsNullOrWhiteSpace(e.Emotion))
+                {
+                    <div class="small">@if (!string.IsNullOrWhiteSpace(e.Emotion)) { <span class="chip chip-warn" style="margin-right:0.4rem">@e.Emotion</span> }@e.Lesson</div>
+                }
+                <div style="text-align:right;margin-top:0.4rem">
+                    <button class="btn btn-ghost btn-sm" aria-label="Delete entry" @onclick="() => Remove(e)"><Icon Name="trash" Size="15" /></button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private static readonly string[] Emotions = { "calm", "confident", "FOMO", "fear", "greedy", "revenge", "bored" };
+    private string? _symbol, _qty, _setup, _entry, _exit, _lesson, _error;
+    private string _side = "long";
+    private string _emotion = "calm";
+
+    private List<JournalEntry> Entries => Progress.Journal;
+
+    private string? BestSetup => Entries.Count == 0 ? null
+        : Entries.GroupBy(e => e.Setup).OrderByDescending(g => g.Sum(e => e.ProfitLoss)).First().Key;
+
+    private async Task Add()
+    {
+        if (string.IsNullOrWhiteSpace(_symbol) || Num.Parse(_qty) is not { } qty || qty <= 0 || Num.Parse(_entry) is not { } entry || Num.Parse(_exit) is not { } exit)
+        {
+            _error = "Symbol, quantity, entry and exit are required.";
+            return;
+        }
+        Entries.Add(new JournalEntry
+        {
+            Date = DateTime.Now, Symbol = _symbol.Trim().ToUpperInvariant(), Side = _side, Quantity = qty, Entry = entry, Exit = exit,
+            Setup = string.IsNullOrWhiteSpace(_setup) ? "unspecified" : _setup.Trim(), Emotion = _emotion, Lesson = _lesson?.Trim() ?? "",
+        });
+        _error = null;
+        _symbol = _qty = _setup = _entry = _exit = _lesson = null;
+        await ProgressService.SaveAsync();
+    }
+
+    private async Task Remove(JournalEntry entry)
+    {
+        Entries.Remove(entry);
+        await ProgressService.SaveAsync();
+    }
+}

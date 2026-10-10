@@ -1,0 +1,68 @@
+@page "/learn/{Number:int}"
+@inherits ProgressPage
+
+@if (Level is null)
+{
+    <div class="empty-state"><h1>Level not found</h1><a class="btn btn-primary" href="learn">All lessons</a></div>
+}
+else
+{
+    <PageTitle>Level @Level.Number: @Level.Name · Trading Academy</PageTitle>
+
+    <nav class="breadcrumbs"><a href="learn">Lessons</a> <span>/</span> <span>Level @Level.Number</span></nav>
+    <div class="page-header">
+        <div class="eyebrow">Level @Level.Number · @Level.Rank · @Level.Duration</div>
+        <h1>@Level.Name</h1>
+        <p>@Level.Goal</p>
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));align-items:start">
+        <div class="lesson-list">
+            @for (var i = 0; i < Level.Lessons.Count; i++)
+            {
+                var lesson = Level.Lessons[i];
+                var done = Progress.CompletedLessons.Contains(lesson.Id);
+                <a class="lesson-row @(done ? "done" : "")" href="lesson/@lesson.Id">
+                    <span class="lesson-num">@if (done) { <Icon Name="check" Size="16" /> } else { @(i + 1) }</span>
+                    <span class="grow">
+                        <strong>@lesson.Title</strong>
+                        <span class="muted small" style="display:block">@lesson.KeyTakeaways.FirstOrDefault()</span>
+                    </span>
+                    <Icon Name="arrow-right" Size="18" Class="faint" />
+                </a>
+            }
+        </div>
+
+        <div class="stack">
+            <div class="card">
+                <h3>Milestones</h3>
+                <ul class="checklist small">
+                    @foreach (var m in Level.Milestones)
+                    {
+                        <li><Icon Name="flag" Size="16" /> @m</li>
+                    }
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Level quiz</h3>
+                <p class="muted small">@Level.Quiz.Count questions. Score @QuizEngine.PassPercent% to @(Level.Number < Curriculum.Levels.Count - 1 ? "unlock the next level" : "complete the course").</p>
+                @if (Progress.IsLevelUnlocked(Level.Number))
+                {
+                    <a class="btn btn-primary btn-block" href="quiz/@Level.Number">@(Progress.IsLevelPassed(Level.Number) ? "Retake quiz" : "Take the quiz")</a>
+                }
+                else
+                {
+                    <button class="btn btn-ghost btn-block" disabled><Icon Name="lock" Size="16" /> Pass Level @(Level.Number - 1) first</button>
+                }
+            </div>
+            <a class="btn btn-ghost" href="https://github.com/Adam-Elmasry-GitHub/TradingAcademy/blob/main/docs/levels/level-@(Level.Number).md" target="_blank" rel="noopener">
+                <Icon Name="link" Size="16" /> Week-by-week study guide
+            </a>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Number { get; set; }
+    private Level? Level => Curriculum.FindLevel(Number);
+}

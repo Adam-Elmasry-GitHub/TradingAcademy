@@ -1,0 +1,147 @@
+@page "/quiz/{Number:int}"
+@inherits ProgressPage
+
+<PageTitle>Quiz · Trading Academy</PageTitle>
+
+@if (Level is null)
+{
+    <div class="empty-state"><h1>Quiz not found</h1><a class="btn btn-primary" href="quiz">All quizzes</a></div>
+}
+else if (!ProgressService.IsLoaded)
+{
+    <div class="empty-state muted">Loading your progress…</div>
+}
+else if (!Progress.IsLevelUnlocked(Level.Number))
+{
+    <div class="empty-state">
+        <div class="stat-icon" style="margin:0 auto 1rem"><Icon Name="lock" /></div>
+        <h1>Level @Level.Number is locked</h1>
+        <p class="muted">Pass the Level @(Level.Number - 1) quiz with @QuizEngine.PassPercent% or more to unlock it.</p>
+        <a class="btn btn-primary" href="quiz/@(Level.Number - 1)">Go to Level @(Level.Number - 1) quiz</a>
+    </div>
+}
+else if (_result is { } result)
+{
+    var circumference = 2 * Math.PI * 64;
+    <div class="card quiz-card fade-in" style="text-align:center">
+        <svg class="score-ring" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="64" fill="none" stroke="var(--surface-2)" stroke-width="14" />
+            <circle cx="80" cy="80" r="64" fill="none" stroke="@(result.Passed ? "var(--up)" : "var(--down)")" stroke-width="14" stroke-linecap="round"
+                    stroke-dasharray="@Pct(circumference * result.Percent / 100) @Pct(circumference)" transform="rotate(-90 80 80)" />
+            <text x="80" y="88" text-anchor="middle" font-size="30" font-weight="800" fill="var(--text)">@result.Percent.ToString("0")%</text>
+        </svg>
+        <h1>@(result.Passed ? "Level passed!" : "Not quite yet")</h1>
+        <p class="muted">You answered @result.Correct of @result.Total questions correctly.</p>
+        @if (result.Passed && _newlyPassed && Curriculum.FindLevel(Level.Number + 1) is { } next)
+        {
+            <div class="callout success" style="text-align:left;margin-bottom:1.25rem">
+                <Icon Name="sparkles" />
+                <div><div class="callout-title">Level @next.Number unlocked</div>@next.Name is now open. Keep going!</div>
+            </div>
+        }
+        else if (!result.Passed)
+        {
+            <div class="callout warn" style="text-align:left;margin-bottom:1.25rem">
+                <Icon Name="book" />
+                <div>You need @QuizEngine.PassPercent% to pass. Review the explanations, re-read the lessons and try again.</div>
+            </div>
+        }
+        <div class="row" style="justify-content:center">
+            <button class="btn btn-ghost" @onclick="Start"><Icon Name="refresh" Size="18" /> Try again</button>
+            @if (result.Passed && Curriculum.FindLevel(Level.Number + 1) is { } nextLevel)
+            {
+                <a class="btn btn-primary" href="learn/@nextLevel.Number">Start Level @nextLevel.Number <Icon Name="arrow-right" Size="18" /></a>
+            }
+            else
+            {
+                <a class="btn btn-primary" href="learn/@Level.Number">Review lessons</a>
+            }
+        </div>
+    </div>
+}
+else if (_questions.Count > 0)
+{
+    var q = _questions[_index];
+    <div class="quiz-card">
+        <nav class="breadcrumbs"><a href="quiz">Quizzes</a> <span>/</span> <span>Level @Level.Number · @Level.Name</span></nav>
+        <div class="row spread small muted" style="margin-bottom:0.5rem">
+            <span>Question @(_index + 1) of @_questions.Count</span>
+            <span>@_answers.Count(a => a.Correct) correct so far</span>
+        </div>
+        <div class="progress-track" style="margin-bottom:1.25rem"><div class="progress-fill" style="width:@Pct(100.0 * (_index + (_selected is null ? 0 : 1)) / _questions.Count)%"></div></div>
+
+        <div class="card fade-in" @key="_index">
+            <h2 style="font-size:1.2rem;margin-bottom:1.1rem">@q.Prompt</h2>
+            <div class="stack">
+                @for (var i = 0; i < q.Options.Count; i++)
+                {
+                    var option = i;
+                    var css = _selected is null ? "" : option == q.Answer ? "correct" : option == _selected ? "wrong" : "";
+                    <button class="option @css" disabled="@(_selected is not null)" @onclick="() => Choose(option)">
+                        <span class="option-key">@((char)('A' + option))</span>
+                        <span>@q.Options[option]</span>
+                    </button>
+                }
+            </div>
+
+            @if (_selected is { } sel)
+            {
+                <div class="callout @(sel == q.Answer ? "success" : "warn") fade-in" style="margin-top:1rem">
+                    <Icon Name="@(sel == q.Answer ? "check" : "book")" />
+                    <div>
+                        <div class="callout-title">@(sel == q.Answer ? "Correct!" : $"The answer is {(char)('A' + q.Answer)}")</div>
+                        <div class="small">@q.Explanation</div>
+                    </div>
+                </div>
+                <div class="row" style="justify-content:flex-end;margin-top:1rem">
+                    <button class="btn btn-primary" @onclick="NextQuestion">@(_index + 1 < _questions.Count ? "Next question" : "See result") <Icon Name="arrow-right" Size="18" /></button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Number { get; set; }
+
+    private Level? Level => Curriculum.FindLevel(Number);
+    private List<QuizQuestion> _questions = new();
+    private readonly List<(int Choice, bool Correct)> _answers = new();
+    private int _index;
+    private int? _selected;
+    private QuizResult? _result;
+    private bool _newlyPassed;
+
+    protected override void OnParametersSet() => Start();
+
+    private void Start()
+    {
+        _questions = Level is null ? new() : QuizEngine.Shuffle(Level.Quiz, Random.Shared);
+        _answers.Clear();
+        _index = 0;
+        _selected = null;
+        _result = null;
+    }
+
+    private void Choose(int option)
+    {
+        if (_selected is not null) return;
+        _selected = option;
+        _answers.Add((option, option == _questions[_index].Answer));
+    }
+
+    private async Task NextQuestion()
+    {
+        if (_index + 1 < _questions.Count)
+        {
+            _index++;
+            _selected = null;
+            return;
+        }
+
+        _result = QuizEngine.Score(_questions, _answers.Select(a => a.Choice).ToList());
+        _newlyPassed = _result.Passed && !Progress.IsLevelPassed(Number);
+        Progress.RecordQuiz(Number, _result.Percent);
+        await ProgressService.SaveAsync();
+    }
+}

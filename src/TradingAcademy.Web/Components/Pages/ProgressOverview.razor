@@ -1,0 +1,63 @@
+@page "/progress"
+@inherits ProgressPage
+
+<PageTitle>Your progress · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">Your stats</div>
+    <h1>Progress</h1>
+    <p>Saved in this browser. Nothing is sent anywhere.</p>
+</div>
+
+<div class="grid grid-4">
+    <div class="card stat"><span class="stat-label">Lessons</span><span class="stat-value">@Progress.CompletedLessons.Count / @Curriculum.TotalLessons</span></div>
+    <div class="card stat"><span class="stat-label">Levels passed</span><span class="stat-value">@Curriculum.Levels.Count(l => Progress.IsLevelPassed(l.Number)) / @Curriculum.Levels.Count</span></div>
+    <div class="card stat"><span class="stat-label">Simulator sessions</span><span class="stat-value">@Progress.SimulatorSessions</span></div>
+    <div class="card stat"><span class="stat-label">Journal entries</span><span class="stat-value">@Progress.Journal.Count</span></div>
+</div>
+
+<div class="section card">
+    <h2>By level</h2>
+    <div class="stack" style="margin-top:1rem">
+        @foreach (var level in Curriculum.Levels)
+        {
+            var done = LessonsDone(level);
+            var hasScore = Progress.BestQuizScores.TryGetValue(level.Number, out var best);
+            <div class="row" style="flex-wrap:nowrap">
+                <span class="lesson-num" style="@(Progress.IsLevelPassed(level.Number) ? "background:var(--up-soft);color:var(--up)" : "")">@level.Number</span>
+                <div style="flex:1;min-width:0">
+                    <div class="row spread small"><strong>@level.Name</strong><span class="muted">@done/@level.Lessons.Count · quiz @(hasScore ? $"{best:0}%" : "–")</span></div>
+                    <div class="progress-track" style="margin-top:0.35rem"><div class="progress-fill @(Progress.IsLevelPassed(level.Number) ? "done" : "")" style="width:@Pct(100.0 * done / level.Lessons.Count)%"></div></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="section card row spread">
+    <div>
+        <h3 style="margin:0">Start over</h3>
+        <span class="muted small">Deletes lessons, quiz scores, simulator stats and journal from this browser.</span>
+    </div>
+    @if (_confirm)
+    {
+        <div class="row">
+            <button class="btn btn-ghost" @onclick="() => _confirm = false">Cancel</button>
+            <button class="btn btn-down" @onclick="Reset">Yes, delete everything</button>
+        </div>
+    }
+    else
+    {
+        <button class="btn btn-ghost" @onclick="() => _confirm = true"><Icon Name="trash" Size="16" /> Reset progress</button>
+    }
+</div>
+
+@code {
+    private bool _confirm;
+
+    private async Task Reset()
+    {
+        await ProgressService.ResetAsync();
+        _confirm = false;
+    }
+}

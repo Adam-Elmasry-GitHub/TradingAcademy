@@ -1,0 +1,330 @@
+@page "/simulator"
+@inherits ProgressPage
+@inject SimulatorSession Sim
+
+<PageTitle>Paper trading simulator · Trading Academy</PageTitle>
+
+<div class="page-header row spread" style="align-items:flex-end">
+    <div>
+        <div class="eyebrow">Practise with fake money</div>
+        <h1>Paper trading simulator</h1>
+        <p>A realistic market that switches between bull, bear and sideways phases. Trade @SimulatorSession.SessionBars candles and see how a professional would rate you.</p>
+    </div>
+    @if (Sim.IsRunning)
+    {
+        <button class="btn btn-ghost" @onclick="EndSession"><Icon Name="flag" Size="18" /> End session</button>
+    }
+</div>
+
+@if (Sim.Market is null)
+{
+    <div class="grid grid-2 fade-in">
+        <div class="card stack">
+            <h2>Start a session</h2>
+            <p class="muted" style="margin:0">You get 10,000 in paper money. Commission is 0.1% per trade and there is no leverage.</p>
+            <div class="field">
+                <label for="seed">Market seed (optional)</label>
+                <input id="seed" class="input mono" placeholder="Random" @bind="_seedText" />
+                <span class="faint small">Share a seed so a friend can trade the exact same market.</span>
+            </div>
+            <button class="btn btn-primary" @onclick="StartSession"><Icon Name="play" Size="18" /> Start trading</button>
+        </div>
+        <div class="card">
+            <h3>Pro habits to practise</h3>
+            <ul class="checklist">
+                <li><Icon Name="check" Size="16" /> Decide your stop before you enter, then size with the risk calculator.</li>
+                <li><Icon Name="check" Size="16" /> Risk 1% or less of your equity per trade.</li>
+                <li><Icon Name="check" Size="16" /> Trade with the trend: price above the orange SMA20 for longs, below for shorts.</li>
+                <li><Icon Name="check" Size="16" /> Let the stop-loss do its job. Never move it further away.</li>
+                <li><Icon Name="check" Size="16" /> Log your best and worst trade in the journal afterwards.</li>
+            </ul>
+        </div>
+    </div>
+}
+else if (Sim.IsFinished && Sim.Stats is { } stats)
+{
+    <div class="stack fade-in">
+        <div class="card" style="background:var(--hero-glow),var(--surface)">
+            <div class="row spread">
+                <div>
+                    <div class="eyebrow">Session report · market #@Sim.Market.Seed</div>
+                    <h2 style="font-size:2rem;margin:0.25rem 0" class="@Num.Css(stats.ReturnPercent)">@Num.SignedPct(stats.ReturnPercent)</h2>
+                    <div class="muted">Buy &amp; hold over the same period: <strong class="@Num.Css(Sim.BuyAndHoldPercent)">@Num.SignedPct(Sim.BuyAndHoldPercent)</strong></div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-ghost" @onclick="() => Restart(Sim.Market.Seed)"><Icon Name="refresh" Size="18" /> Replay this market</button>
+                    <button class="btn btn-primary" @onclick="() => Restart(null)"><Icon Name="play" Size="18" /> New market</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-4">
+            <div class="card stat"><span class="stat-label">Trades</span><span class="stat-value">@stats.TradeCount</span></div>
+            <div class="card stat"><span class="stat-label">Win rate</span><span class="stat-value">@stats.WinRate.ToString("0")%</span></div>
+            <div class="card stat"><span class="stat-label">Profit factor</span><span class="stat-value">@stats.ProfitFactor.ToString("0.00")</span><span class="faint small">1.5+ is good</span></div>
+            <div class="card stat"><span class="stat-label">Max drawdown</span><span class="stat-value @(stats.MaxDrawdownPercent > 20 ? "down" : "")">@stats.MaxDrawdownPercent.ToString("0.0")%</span><span class="faint small">pros aim for under 10-20%</span></div>
+            <div class="card stat"><span class="stat-label">Average win</span><span class="stat-value up">@Num.Money(stats.AverageWin)</span></div>
+            <div class="card stat"><span class="stat-label">Average loss</span><span class="stat-value down">@Num.Money(stats.AverageLoss)</span></div>
+            <div class="card stat"><span class="stat-label">Expectancy / trade</span><span class="stat-value @Num.Css(stats.Expectancy)">@Num.Signed(stats.Expectancy)</span></div>
+            <div class="card stat"><span class="stat-label">Commission paid</span><span class="stat-value">@Num.Money(Sim.Account!.TotalCommission)</span></div>
+        </div>
+
+        <div class="callout info">
+            <Icon Name="sparkles" />
+            <div>
+                <div class="callout-title">Coach's notes</div>
+                <ul>@foreach (var note in SessionCoach.Notes(stats, Sim.Account!)) { <li>@note</li> }</ul>
+            </div>
+        </div>
+
+        @if (Sim.Account!.Trades.Count > 0)
+        {
+            <div class="table-wrap">
+                <table class="table">
+                    <thead><tr><th>#</th><th>Side</th><th class="num">Qty</th><th class="num">Entry</th><th class="num">Exit</th><th class="num">P/L</th><th>Exit reason</th></tr></thead>
+                    <tbody>
+                        @for (var i = 0; i < Sim.Account.Trades.Count; i++)
+                        {
+                            var t = Sim.Account.Trades[i];
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td><span class="chip @(t.Side == "long" ? "chip-done" : "chip-down")">@t.Side</span></td>
+                                <td class="num mono">@t.Quantity</td>
+                                <td class="num mono">@Num.Money(t.EntryPrice)</td>
+                                <td class="num mono">@Num.Money(t.ExitPrice)</td>
+                                <td class="num mono @Num.Css(t.ProfitLoss)">@Num.Signed(t.ProfitLoss)</td>
+                                <td class="muted">@t.Reason</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        <a class="btn btn-ghost" href="journal" style="align-self:flex-start"><Icon Name="notebook" Size="18" /> Log a trade in your journal</a>
+    </div>
+}
+else
+{
+    var market = Sim.Market;
+    var account = Sim.Account!;
+    var candles = market.Candles;
+    var closes = Indicators.Closes(candles);
+    var sma20 = Indicators.Sma(closes, 20);
+    var sma50 = Indicators.Sma(closes, 50);
+    var rsi = Indicators.Rsi(closes);
+    var atr = Indicators.Atr(candles);
+    var (macd, signal) = Indicators.Macd(closes);
+    var start = Math.Max(0, candles.Count - Visible);
+    var i = candles.Count - 1;
+    var equity = account.Equity(Sim.Price);
+    var change = (equity / account.StartingCash - 1) * 100;
+    var dayChange = candles.Count > 1 ? (candles[^1].Close / candles[^2].Close - 1) * 100 : 0;
+
+    <div class="sim-layout">
+        <div class="stack">
+            <div class="card chart-card">
+                <div class="chart-head">
+                    <div>
+                        <div class="muted small">SIM · simulated stock · market #@market.Seed</div>
+                        <div class="row" style="gap:0.6rem">
+                            <span class="price-big mono">@Num.Money(Sim.Price)</span>
+                            <span class="chip @(dayChange >= 0 ? "chip-done" : "chip-down")">@Num.SignedPct(dayChange)</span>
+                        </div>
+                    </div>
+                    <div style="min-width:180px">
+                        <div class="row spread bars-left"><span>Session progress</span><span>@Sim.BarsLeft candles left</span></div>
+                        <div class="progress-track"><div class="progress-fill" style="width:@Pct(100.0 * (SimulatorSession.SessionBars - Sim.BarsLeft) / SimulatorSession.SessionBars)%"></div></div>
+                    </div>
+                </div>
+                <div class="chart-scroll">
+                    <CandleChart Candles="@candles.Skip(start).ToList()"
+                                 Sma20="@sma20.Skip(start).ToList()"
+                                 Sma50="@sma50.Skip(start).ToList()"
+                                 Rsi="@rsi.Skip(start).ToList()"
+                                 Levels="@ChartLevels(account)" />
+                </div>
+                <div class="row small muted" style="padding:0.5rem 0.5rem 0.25rem;gap:1.1rem">
+                    <span><span style="color:var(--warn)">━</span> SMA 20</span>
+                    <span><span style="color:var(--accent)">━</span> SMA 50</span>
+                    <span><span style="color:var(--primary)">━</span> RSI 14</span>
+                    <span><span style="color:var(--down)">┅</span> stop</span>
+                    <span><span style="color:var(--up)">┅</span> target</span>
+                </div>
+            </div>
+
+            <div class="indicator-strip">
+                <div class="indicator"><div class="stat-label">SMA 20</div><div class="num">@Num.Opt(sma20[i])</div></div>
+                <div class="indicator"><div class="stat-label">SMA 50</div><div class="num">@Num.Opt(sma50[i])</div></div>
+                <div class="indicator"><div class="stat-label">RSI 14</div><div class="num @(rsi[i] > 70 ? "down" : rsi[i] < 30 ? "up" : "")">@Num.Opt(rsi[i], "0")</div></div>
+                <div class="indicator"><div class="stat-label">ATR 14</div><div class="num">@Num.Opt(atr[i])</div></div>
+                <div class="indicator"><div class="stat-label">MACD / signal</div><div class="num small">@Num.Opt(macd[i]) / @Num.Opt(signal[i])</div></div>
+            </div>
+
+            <div class="card">
+                <div class="row spread">
+                    <h3 style="margin:0">Advance time</h3>
+                    <div class="row">
+                        <button class="btn btn-primary" @onclick="() => Advance(1)">Next candle <Icon Name="arrow-right" Size="18" /></button>
+                        <button class="btn btn-ghost" @onclick="() => Advance(5)">+5</button>
+                        <button class="btn btn-ghost" @onclick="() => Advance(10)">+10</button>
+                    </div>
+                </div>
+                <p class="faint small" style="margin:0.5rem 0 0">Fast-forward stops early if your stop-loss or take-profit is filled.</p>
+            </div>
+        </div>
+
+        <div class="stack">
+            <div class="card">
+                <div class="row spread"><h3 style="margin:0">Account</h3><span class="chip @(account.IsFlat ? "" : account.Position > 0 ? "chip-done" : "chip-down")">@account.Side</span></div>
+                <div style="margin:0.75rem 0">
+                    <div class="stat-label">Equity</div>
+                    <div class="row" style="gap:0.5rem"><span class="stat-value mono">@Num.Money(equity)</span><span class="@Num.Css(change) small">@Num.SignedPct(change)</span></div>
+                </div>
+                <div class="kv"><span class="muted">Cash</span><span class="mono">@Num.Money(account.Cash)</span></div>
+                <div class="kv"><span class="muted">Position</span><span class="mono">@(account.IsFlat ? "–" : $"{Math.Abs(account.Position)} @ {Num.Money(account.AveragePrice)}")</span></div>
+                <div class="kv"><span class="muted">Open P/L</span><span class="mono @Num.Css(account.UnrealizedPnL(Sim.Price))">@(account.IsFlat ? "–" : Num.Signed(account.UnrealizedPnL(Sim.Price)))</span></div>
+                <div class="kv"><span class="muted">Closed trades</span><span class="mono">@account.Trades.Count</span></div>
+            </div>
+
+            <div class="card stack ticket">
+                <h3 style="margin:0">Order ticket</h3>
+                <div class="field">
+                    <label for="qty">Quantity</label>
+                    <input id="qty" class="input mono" inputmode="decimal" @bind="_qtyText" @bind:event="oninput" />
+                </div>
+                <div class="qty-row">
+                    <button class="btn btn-up" disabled="@(Qty is null)" @onclick="() => Act(() => Sim.Buy(Qty!.Value))">Buy</button>
+                    <button class="btn btn-down" disabled="@(Qty is null)" @onclick="() => Act(() => Sim.Sell(Qty!.Value))">Sell / Short</button>
+                </div>
+                <button class="btn btn-ghost" disabled="@account.IsFlat" @onclick="() => Act(Sim.Close)">Close position</button>
+
+                <div class="qty-row">
+                    <div class="field">
+                        <label for="sl">Stop-loss @(account.StopLoss is { } s ? $"({Num.Money(s)})" : "")</label>
+                        <input id="sl" class="input mono" inputmode="decimal" placeholder="price" @bind="_stopText" @bind:event="oninput" />
+                    </div>
+                    <div class="field">
+                        <label for="tp">Take-profit @(account.TakeProfit is { } t ? $"({Num.Money(t)})" : "")</label>
+                        <input id="tp" class="input mono" inputmode="decimal" placeholder="price" @bind="_targetText" @bind:event="oninput" />
+                    </div>
+                </div>
+                <div class="qty-row">
+                    <button class="btn btn-ghost btn-sm" disabled="@account.IsFlat" @onclick="() => Act(() => Sim.SetStop(Num.Parse(_stopText)))">@(string.IsNullOrWhiteSpace(_stopText) ? "Clear stop" : "Set stop")</button>
+                    <button class="btn btn-ghost btn-sm" disabled="@account.IsFlat" @onclick="() => Act(() => Sim.SetTarget(Num.Parse(_targetText)))">@(string.IsNullOrWhiteSpace(_targetText) ? "Clear target" : "Set target")</button>
+                </div>
+            </div>
+
+            <div class="card stack">
+                <h3 style="margin:0">Risk-based size</h3>
+                <div class="qty-row">
+                    <div class="field"><label for="risk">Risk %</label><input id="risk" class="input mono" inputmode="decimal" @bind="_riskText" @bind:event="oninput" /></div>
+                    <div class="field"><label for="plannedStop">Planned stop</label><input id="plannedStop" class="input mono" inputmode="decimal" placeholder="@(atr[i] is { } a ? Num.Money(Sim.Price - (decimal)(2 * a)) : "")" @bind="_plannedStopText" @bind:event="oninput" /></div>
+                </div>
+                @if (SuggestedSize(equity) is { } size)
+                {
+                    <div class="callout info small" style="padding:0.7rem 0.8rem">
+                        <div>Trade <strong class="mono">@size</strong> units. If the stop is hit you lose about <strong class="mono">@Num.Money(size * Math.Abs(Sim.Price - Num.Parse(_plannedStopText)!.Value))</strong>.</div>
+                    </div>
+                    <button class="btn btn-ghost btn-sm" @onclick="() => UseSize(size)">Use @size units and this stop</button>
+                }
+                else
+                {
+                    <span class="faint small">Enter a stop price. Tip: 2 × ATR from the price is a common choice (shown as the placeholder for a long).</span>
+                }
+            </div>
+
+            @if (Sim.Log.Count > 0)
+            {
+                <div class="card">
+                    <h3>Activity</h3>
+                    <ul class="log">
+                        @foreach (var (text, good) in Sim.Log)
+                        {
+                            <li class="@(good ? "" : "bad")">@text</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private const int Visible = 80;
+    private string? _seedText;
+    private string _qtyText = "10";
+    private string? _stopText;
+    private string? _targetText;
+    private string _riskText = "1";
+    private string? _plannedStopText;
+
+    private decimal? Qty => Num.Parse(_qtyText) is { } q && q > 0 ? q : null;
+
+    private void StartSession() =>
+        Sim.Start(int.TryParse(_seedText, out var seed) ? seed : Random.Shared.Next(1, 100_000));
+
+    private async Task Restart(int? seed)
+    {
+        await RecordIfFinished();
+        _stopText = _targetText = _plannedStopText = null;
+        Sim.Start(seed ?? Random.Shared.Next(1, 100_000));
+    }
+
+    private async Task Advance(int bars)
+    {
+        Sim.Advance(bars);
+        SyncOrderFields();
+        await RecordIfFinished();
+    }
+
+    private async Task EndSession()
+    {
+        Sim.Finish();
+        await RecordIfFinished();
+    }
+
+    private void Act(Action action)
+    {
+        action();
+        SyncOrderFields();
+    }
+
+    private void UseSize(decimal size)
+    {
+        _qtyText = size.ToString(CultureInfo.InvariantCulture);
+        _stopText = _plannedStopText;
+    }
+
+    private decimal? SuggestedSize(decimal equity)
+    {
+        if (Num.Parse(_riskText) is not { } risk || Num.Parse(_plannedStopText) is not { } stop || risk <= 0 || risk > 100 || stop == Sim.Price) return null;
+        return RiskCalculator.PositionSize(equity, risk, Sim.Price, stop);
+    }
+
+    // After a fill the account clears its orders; mirror that in the input boxes.
+    private void SyncOrderFields()
+    {
+        if (Sim.Account is null) return;
+        if (Sim.Account.StopLoss is null) _stopText = null;
+        if (Sim.Account.TakeProfit is null) _targetText = null;
+    }
+
+    private async Task RecordIfFinished()
+    {
+        if (!Sim.IsFinished || Sim.Recorded || Sim.Stats is null) return;
+        Sim.Recorded = true;
+        var result = (double)Sim.Stats.ReturnPercent;
+        Progress.BestSimulatorReturnPercent = Progress.SimulatorSessions == 0 ? result : Math.Max(Progress.BestSimulatorReturnPercent, result);
+        Progress.SimulatorSessions++;
+        await ProgressService.SaveAsync();
+    }
+
+    private static IReadOnlyList<CandleChart.ChartLevel> ChartLevels(PaperAccount account)
+    {
+        var levels = new List<CandleChart.ChartLevel>();
+        if (!account.IsFlat) levels.Add(new(account.AveragePrice, "ENTRY", "var(--primary)"));
+        if (account.StopLoss is { } sl) levels.Add(new(sl, "STOP", "var(--down)"));
+        if (account.TakeProfit is { } tp) levels.Add(new(tp, "TARGET", "var(--up)"));
+        return levels;
+    }
+}
