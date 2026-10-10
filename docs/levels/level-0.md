@@ -74,7 +74,7 @@ Going long means buying first and selling later (profit if price rises). Going s
 - Spread and slippage are real costs.
 - A stop-loss is your pre-planned exit when you are wrong.
 
-**Practice:** Open the Paper trading simulator. Buy 10 units, place a stop-loss below the price with 'sl', then advance candles with 'n' until it closes. Then try a short with 's 10'.
+**Practice:** Open the Paper trading simulator. Buy 10 units, set a stop-loss below the price, then advance candles until it closes. Then sell 10 units while flat to open a short.
 
 **Read more:** Investopedia: 'Market Order vs. Limit Order'; investor.gov: 'Types of Orders'
 

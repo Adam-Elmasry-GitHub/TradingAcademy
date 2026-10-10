@@ -1,0 +1,104 @@
+@* Responsive SVG candlestick chart with moving averages, order levels and an RSI panel. *@
+@{
+    const double W = 900, PriceH = 330, RsiTop = 352, RsiH = 70, AxisW = 64, PadT = 12;
+    var plotW = W - AxisW;
+    var n = Math.Max(Candles.Count, 1);
+    var step = plotW / n;
+    var bodyW = Math.Max(2, step * 0.62);
+
+    var prices = Candles.SelectMany(c => new[] { (double)c.High, (double)c.Low })
+        .Concat(Sma20.Where(v => v.HasValue).Select(v => v!.Value))
+        .Concat(Sma50.Where(v => v.HasValue).Select(v => v!.Value))
+        .Concat(Levels.Select(l => (double)l.Price)).ToList();
+    var top = prices.Count > 0 ? prices.Max() : 1;
+    var bottom = prices.Count > 0 ? prices.Min() : 0;
+    var pad = Math.Max((top - bottom) * 0.06, 0.5);
+    top += pad; bottom -= pad;
+    double Y(double p) => PadT + (top - p) / (top - bottom) * (PriceH - PadT);
+    double X(int i) => i * step + step / 2;
+    double RsiY(double v) => RsiTop + (100 - v) / 100 * RsiH;
+    string F(double v) => v.ToString("0.##", CultureInfo.InvariantCulture);
+    string Line(IReadOnlyList<double?> values, Func<double, double> y)
+    {
+        var sb = new System.Text.StringBuilder();
+        var pen = 'M';
+        for (var i = 0; i < values.Count; i++)
+        {
+            if (values[i] is not { } v) { pen = 'M'; continue; }
+            sb.Append(pen).Append(F(X(i))).Append(',').Append(F(y(v))).Append(' ');
+            pen = 'L';
+        }
+        return sb.ToString();
+    }
+    var last = Candles.Count > 0 ? Candles[^1] : default;
+}
+
+<svg class="chart-svg" viewBox="0 0 @F(W) @F(RsiTop + RsiH + 8)" role="img" aria-label="Candlestick chart">
+    @* Grid and price axis *@
+    @for (var g = 0; g <= 5; g++)
+    {
+        var price = bottom + (top - bottom) * g / 5;
+        var y = Y(price);
+        <g>
+            <line x1="0" x2="@F(plotW)" y1="@F(y)" y2="@F(y)" stroke="var(--grid)" />
+            <text x="@F(plotW + 8)" y="@F(y + 4)">@price.ToString("0.00", CultureInfo.InvariantCulture)</text>
+        </g>
+    }
+
+    @* Candles *@
+    @for (var i = 0; i < Candles.Count; i++)
+    {
+        var c = Candles[i];
+        var color = c.IsBullish ? "var(--up)" : "var(--down)";
+        var yOpen = Y((double)c.Open); var yClose = Y((double)c.Close);
+        <line x1="@F(X(i))" x2="@F(X(i))" y1="@F(Y((double)c.High))" y2="@F(Y((double)c.Low))" stroke="@color" stroke-width="1.2" />
+        <rect x="@F(X(i) - bodyW / 2)" y="@F(Math.Min(yOpen, yClose))" width="@F(bodyW)" height="@F(Math.Max(1.2, Math.Abs(yOpen - yClose)))" rx="1" fill="@color" />
+    }
+
+    @* Moving averages *@
+    <path d="@Line(Sma50, Y)" fill="none" stroke="var(--accent)" stroke-width="1.6" opacity="0.8" />
+    <path d="@Line(Sma20, Y)" fill="none" stroke="var(--warn)" stroke-width="1.6" />
+
+    @* Entry, stop and target levels *@
+    @foreach (var level in Levels)
+    {
+        var y = Y((double)level.Price);
+        <g>
+            <line x1="0" x2="@F(plotW)" y1="@F(y)" y2="@F(y)" stroke="@level.Color" stroke-width="1.3" stroke-dasharray="6 5" />
+            <rect x="@F(plotW - 58)" y="@F(y - 9)" width="56" height="18" rx="4" fill="@level.Color" />
+            <text x="@F(plotW - 30)" y="@F(y + 4)" text-anchor="middle" style="fill:#fff;font-weight:700">@level.Label</text>
+        </g>
+    }
+
+    @* Last price tag *@
+    @if (Candles.Count > 0)
+    {
+        var y = Y((double)last.Close);
+        var color = last.IsBullish ? "var(--up)" : "var(--down)";
+        <g>
+            <line x1="0" x2="@F(plotW)" y1="@F(y)" y2="@F(y)" stroke="@color" stroke-width="0.8" opacity="0.6" />
+            <rect x="@F(plotW + 2)" y="@F(y - 10)" width="@F(AxisW - 4)" height="20" rx="4" fill="@color" />
+            <text x="@F(plotW + AxisW / 2)" y="@F(y + 4)" text-anchor="middle" style="fill:#fff;font-weight:700">@last.Close.ToString("0.00", CultureInfo.InvariantCulture)</text>
+        </g>
+    }
+
+    @* RSI panel *@
+    <rect x="0" y="@F(RsiTop)" width="@F(plotW)" height="@F(RsiH)" fill="var(--surface-2)" rx="6" />
+    <rect x="0" y="@F(RsiY(70))" width="@F(plotW)" height="@F(RsiY(30) - RsiY(70))" fill="var(--primary-soft)" />
+    <line x1="0" x2="@F(plotW)" y1="@F(RsiY(70))" y2="@F(RsiY(70))" stroke="var(--grid)" />
+    <line x1="0" x2="@F(plotW)" y1="@F(RsiY(30))" y2="@F(RsiY(30))" stroke="var(--grid)" />
+    <path d="@Line(Rsi, RsiY)" fill="none" stroke="var(--primary)" stroke-width="1.6" />
+    <text x="@F(plotW + 8)" y="@F(RsiY(70) + 4)">70</text>
+    <text x="@F(plotW + 8)" y="@F(RsiY(30) + 4)">30</text>
+    <text x="8" y="@F(RsiTop + 14)">RSI 14</text>
+</svg>
+
+@code {
+    public record ChartLevel(decimal Price, string Label, string Color);
+
+    [Parameter, EditorRequired] public IReadOnlyList<Candle> Candles { get; set; } = Array.Empty<Candle>();
+    [Parameter] public IReadOnlyList<double?> Sma20 { get; set; } = Array.Empty<double?>();
+    [Parameter] public IReadOnlyList<double?> Sma50 { get; set; } = Array.Empty<double?>();
+    [Parameter] public IReadOnlyList<double?> Rsi { get; set; } = Array.Empty<double?>();
+    [Parameter] public IReadOnlyList<ChartLevel> Levels { get; set; } = Array.Empty<ChartLevel>();
+}

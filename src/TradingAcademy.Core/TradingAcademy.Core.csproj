@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TradingAcademy</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The curriculum ships inside the assembly so every front end (console, web, tests) gets the same content. -->
+    <EmbeddedResource Include="Content\levels\*.json" LogicalName="TradingAcademy.Content.levels.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

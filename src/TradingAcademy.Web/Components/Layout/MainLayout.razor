@@ -1,0 +1,102 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+@inject ProgressService ProgressService
+@inject CurriculumService Curriculum
+@inject IJSRuntime JS
+@inject NavigationManager Nav
+
+<div class="shell @(_menuOpen ? "menu-open" : "")">
+    <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="" @onclick="CloseMenu">
+            <span class="brand-mark"><Icon Name="chart" Size="18" /></span>
+            <span>Trading<strong>Academy</strong></span>
+        </a>
+
+        <nav class="nav">
+            @foreach (var item in NavItems)
+            {
+                <NavLink class="nav-link" href="@item.Href" Match="@(item.Href == "" ? NavLinkMatch.All : NavLinkMatch.Prefix)" @onclick="CloseMenu">
+                    <Icon Name="@item.Icon" />
+                    <span>@item.Label</span>
+                </NavLink>
+            }
+        </nav>
+
+        <div class="sidebar-card">
+            <div class="eyebrow">Your level</div>
+            <div class="sidebar-level">@CurrentLevel.Number · @CurrentLevel.Rank</div>
+            <div class="progress-track"><div class="progress-fill" style="width:@(OverallPercent.ToString("0", CultureInfo.InvariantCulture))%"></div></div>
+            <div class="muted small">@ProgressService.Progress.CompletedLessons.Count of @Curriculum.TotalLessons lessons done</div>
+        </div>
+
+        <button class="theme-toggle" @onclick="ToggleTheme">
+            <Icon Name="@(_theme == "light" ? "moon" : "sun")" Size="18" />
+            <span>@(_theme == "light" ? "Dark mode" : "Light mode")</span>
+        </button>
+    </aside>
+
+    <div class="scrim" @onclick="CloseMenu"></div>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-btn" aria-label="Open menu" @onclick="() => _menuOpen = true"><Icon Name="menu" /></button>
+            <a class="brand" href="">
+                <span class="brand-mark"><Icon Name="chart" Size="18" /></span>
+                <span>Trading<strong>Academy</strong></span>
+            </a>
+            <button class="icon-btn" aria-label="Toggle theme" @onclick="ToggleTheme"><Icon Name="@(_theme == "light" ? "moon" : "sun")" /></button>
+        </header>
+
+        <main class="content">
+            @Body
+        </main>
+
+        <footer class="footer muted small">
+            Educational only. Not financial advice. Most retail traders lose money.
+            <a href="https://github.com/Adam-Elmasry-GitHub/TradingAcademy" target="_blank" rel="noopener">Source on GitHub</a>
+        </footer>
+    </div>
+</div>
+
+@code {
+    private record NavItem(string Href, string Label, string Icon);
+
+    private static readonly NavItem[] NavItems =
+    {
+        new("", "Home", "home"),
+        new("roadmap", "Roadmap", "map"),
+        new("learn", "Lessons", "book"),
+        new("quiz", "Quizzes", "quiz"),
+        new("simulator", "Simulator", "candles"),
+        new("tools", "Toolkit", "calculator"),
+        new("journal", "Journal", "notebook"),
+        new("progress", "Progress", "trophy"),
+    };
+
+    private bool _menuOpen;
+    private string _theme = "dark";
+
+    private Level CurrentLevel =>
+        Curriculum.Levels.LastOrDefault(l => ProgressService.Progress.IsLevelUnlocked(l.Number)) ?? Curriculum.Levels[0];
+
+    private double OverallPercent =>
+        Curriculum.TotalLessons == 0 ? 0 : 100.0 * ProgressService.Progress.CompletedLessons.Count / Curriculum.TotalLessons;
+
+    protected override void OnInitialized() => ProgressService.Changed += OnChanged;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        await ProgressService.EnsureLoadedAsync();
+        _theme = await JS.InvokeAsync<string>("taTheme.current");
+        StateHasChanged();
+    }
+
+    private async Task ToggleTheme() => _theme = await JS.InvokeAsync<string>("taTheme.toggle");
+
+    private void CloseMenu() => _menuOpen = false;
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    public void Dispose() => ProgressService.Changed -= OnChanged;
+}

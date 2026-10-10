@@ -1,0 +1,130 @@
+@page "/"
+@inherits ProgressPage
+
+<PageTitle>Trading Academy · Learn trading from zero to pro</PageTitle>
+
+<section class="hero fade-in">
+    <svg class="hero-chart" viewBox="0 0 460 260" aria-hidden="true">
+        @for (var i = 0; i < HeroCandles.Length; i++)
+        {
+            var (o, c, h, l) = HeroCandles[i];
+            var x = 20 + i * 26;
+            var up = c < o;
+            <line x1="@(x + 7)" x2="@(x + 7)" y1="@h" y2="@l" stroke="@(up ? "var(--up)" : "var(--down)")" stroke-width="2" />
+            <rect x="@x" y="@Math.Min(o, c)" width="14" height="@Math.Max(3, Math.Abs(o - c))" rx="2" fill="@(up ? "var(--up)" : "var(--down)")" />
+        }
+        <path d="M20 200 C 120 190, 160 150, 240 130 S 380 60, 450 40" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" />
+    </svg>
+    <div class="eyebrow">Beginner → Pro in 8 levels</div>
+    <h1>Learn to trade <span>the professional way</span></h1>
+    <p>Structured lessons, quizzes that unlock each level, and a realistic paper-trading simulator. Build skill and discipline before you ever risk real money.</p>
+    <div class="row">
+        @if (NextLesson is { } next)
+        {
+            <a class="btn btn-primary" href="lesson/@next.Id"><Icon Name="play" Size="18" /> @(Progress.CompletedLessons.Count == 0 ? "Start learning" : "Continue: " + next.Title)</a>
+        }
+        else
+        {
+            <a class="btn btn-primary" href="progress"><Icon Name="trophy" Size="18" /> See your progress</a>
+        }
+        <a class="btn btn-ghost" href="simulator"><Icon Name="candles" Size="18" /> Open simulator</a>
+    </div>
+</section>
+
+<section class="section grid grid-4">
+    <div class="card stat">
+        <div class="stat-icon"><Icon Name="book" /></div>
+        <span class="stat-label">Lessons completed</span>
+        <span class="stat-value">@Progress.CompletedLessons.Count<span class="faint small"> / @Curriculum.TotalLessons</span></span>
+    </div>
+    <div class="card stat">
+        <div class="stat-icon"><Icon Name="flag" /></div>
+        <span class="stat-label">Levels passed</span>
+        <span class="stat-value">@Curriculum.Levels.Count(l => Progress.IsLevelPassed(l.Number))<span class="faint small"> / @Curriculum.Levels.Count</span></span>
+    </div>
+    <div class="card stat">
+        <div class="stat-icon"><Icon Name="candles" /></div>
+        <span class="stat-label">Simulator sessions</span>
+        <span class="stat-value">@Progress.SimulatorSessions</span>
+    </div>
+    <div class="card stat">
+        <div class="stat-icon"><Icon Name="chart" /></div>
+        <span class="stat-label">Best session return</span>
+        <span class="stat-value @(Progress.BestSimulatorReturnPercent >= 0 ? "up" : "down")">@(Progress.SimulatorSessions == 0 ? "–" : Progress.BestSimulatorReturnPercent.ToString("+0.0;-0.0") + "%")</span>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title">
+        <h2>Your current level</h2>
+        <a href="roadmap" class="row small">Full roadmap <Icon Name="arrow-right" Size="16" /></a>
+    </div>
+    <div class="card">
+        <div class="level-card-head">
+            <div>
+                <div class="eyebrow">Level @Current.Number · @Current.Rank</div>
+                <h3 style="font-size:1.3rem">@Current.Name</h3>
+                <p class="muted" style="margin:0">@Current.Goal</p>
+            </div>
+            <span class="chip chip-@LevelStatus(Current)">@StatusText(Current)</span>
+        </div>
+        <div style="margin:1.1rem 0 0.4rem" class="progress-track"><div class="progress-fill" style="width:@Pct(100.0 * LessonsDone(Current) / Current.Lessons.Count)%"></div></div>
+        <div class="row spread">
+            <span class="muted small">@LessonsDone(Current) of @Current.Lessons.Count lessons · quiz pass mark @QuizEngine.PassPercent%</span>
+            <div class="row">
+                <a class="btn btn-ghost btn-sm" href="learn/@Current.Number">Lessons</a>
+                <a class="btn btn-primary btn-sm" href="quiz/@Current.Number">Take the quiz</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-title"><h2>Everything you need</h2></div>
+    <div class="grid grid-3">
+        @foreach (var f in Features)
+        {
+            <a class="card card-link feature-card" href="@f.Href">
+                <div class="stat-icon"><Icon Name="@f.Icon" /></div>
+                <h3>@f.Title</h3>
+                <p>@f.Text</p>
+            </a>
+        }
+    </div>
+</section>
+
+<section class="section">
+    <div class="callout warn">
+        <Icon Name="shield" />
+        <div>
+            <div class="callout-title">Protect your capital first</div>
+            <div class="small">This academy is for education only and is not financial advice. Practise in the simulator and a broker demo account until you have passed Level 3 (Risk Management).</div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private static readonly (double O, double C, double H, double L)[] HeroCandles =
+    {
+        (210, 196, 188, 218), (196, 200, 190, 206), (200, 182, 176, 204), (182, 170, 162, 188), (170, 176, 164, 182),
+        (176, 156, 150, 180), (156, 146, 138, 160), (146, 152, 140, 158), (152, 130, 124, 156), (130, 118, 110, 134),
+        (118, 124, 112, 128), (124, 100, 94, 128), (100, 86, 78, 104), (86, 92, 80, 98), (92, 70, 62, 96), (70, 56, 48, 74),
+    };
+
+    private record Feature(string Href, string Icon, string Title, string Text);
+
+    private static readonly Feature[] Features =
+    {
+        new("roadmap", "map", "Clear roadmap", "Eight levels from Novice to Pro, each with a goal, milestones and a time estimate."),
+        new("learn", "book", "32 focused lessons", "Markets, charts, indicators, risk, macro, psychology, backtesting and algorithmic trading."),
+        new("quiz", "quiz", "Quizzes that unlock levels", "60 questions with explanations. Score 70% to move on."),
+        new("simulator", "candles", "Paper-trading simulator", "Trade a realistic market with charts, indicators, stops and a coach's report."),
+        new("tools", "calculator", "Risk toolkit", "Position size, reward-to-risk, expectancy, drawdown recovery and Kelly."),
+        new("journal", "notebook", "Trading journal", "Log every trade with your setup, emotion and lesson, and find your best setup."),
+    };
+
+    private Level Current => Curriculum.Levels.LastOrDefault(l => Progress.IsLevelUnlocked(l.Number)) ?? Curriculum.Levels[0];
+    private Lesson? NextLesson => Curriculum.NextLesson(Progress);
+
+    private string StatusText(Level level) => LevelStatus(level) switch { "done" => "Completed", "open" => "In progress", _ => "Locked" };
+}

@@ -1,0 +1,37 @@
+@page "/quiz"
+@inherits ProgressPage
+
+<PageTitle>Quizzes · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">Test yourself</div>
+    <h1>Quizzes</h1>
+    <p>Each level ends with a quiz. Score @QuizEngine.PassPercent% or more to unlock the next level. Questions are shuffled every attempt.</p>
+</div>
+
+<div class="grid grid-3">
+    @foreach (var level in Curriculum.Levels)
+    {
+        var status = LevelStatus(level);
+        var hasScore = Progress.BestQuizScores.TryGetValue(level.Number, out var best);
+        <div class="card fade-in stack">
+            <div class="level-card-head">
+                <div class="eyebrow">Level @level.Number</div>
+                <span class="chip chip-@status">@(status switch { "done" => "Passed", "open" => "Open", _ => "Locked" })</span>
+            </div>
+            <h3 style="margin:0">@level.Name</h3>
+            <div class="row spread small muted">
+                <span>@level.Quiz.Count questions</span>
+                <span>Best: <strong class="@(hasScore ? (best >= QuizEngine.PassPercent ? "up" : "down") : "")">@(hasScore ? $"{best:0}%" : "–")</strong></span>
+            </div>
+            @if (status == "locked")
+            {
+                <button class="btn btn-ghost btn-sm" disabled><Icon Name="lock" Size="15" /> Pass Level @(level.Number - 1) first</button>
+            }
+            else
+            {
+                <a class="btn btn-primary btn-sm" href="quiz/@level.Number">@(status == "done" ? "Retake" : "Start quiz")</a>
+            }
+        </div>
+    }
+</div>

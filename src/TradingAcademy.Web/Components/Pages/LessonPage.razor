@@ -1,0 +1,98 @@
+@page "/lesson/{Id}"
+@inherits ProgressPage
+@inject NavigationManager Nav
+
+@if (Found is not { } found)
+{
+    <div class="empty-state"><h1>Lesson not found</h1><a class="btn btn-primary" href="learn">All lessons</a></div>
+}
+else
+{
+    var (level, lesson, index) = found;
+    var done = Progress.CompletedLessons.Contains(lesson.Id);
+    <PageTitle>@lesson.Title · Trading Academy</PageTitle>
+
+    <article class="article fade-in" @key="lesson.Id">
+        <nav class="breadcrumbs">
+            <a href="learn">Lessons</a> <span>/</span>
+            <a href="learn/@level.Number">Level @level.Number · @level.Name</a> <span>/</span>
+            <span>Lesson @(index + 1) of @level.Lessons.Count</span>
+        </nav>
+        <div class="progress-track" style="margin-bottom:1.5rem"><div class="progress-fill" style="width:@Pct(100.0 * (index + 1) / level.Lessons.Count)%"></div></div>
+
+        <div class="eyebrow">Lesson @lesson.Id</div>
+        <h1>@lesson.Title</h1>
+        @if (done) { <span class="chip chip-done" style="margin-bottom:1rem"><Icon Name="check" Size="13" /> Completed</span> }
+
+        @for (var p = 0; p < lesson.Body.Count; p++)
+        {
+            <p class="@(p == 0 ? "lead" : "")">@lesson.Body[p]</p>
+        }
+
+        <div class="stack" style="margin-top:1.5rem">
+            <div class="callout success">
+                <Icon Name="check" />
+                <div>
+                    <div class="callout-title">Key takeaways</div>
+                    <ul>@foreach (var t in lesson.KeyTakeaways) { <li>@t</li> }</ul>
+                </div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(lesson.Exercise))
+            {
+                <div class="callout info">
+                    <Icon Name="target" />
+                    <div>
+                        <div class="callout-title">Practice</div>
+                        <div>@lesson.Exercise</div>
+                    </div>
+                </div>
+            }
+            @if (lesson.ReadMore.Count > 0)
+            {
+                <div class="callout">
+                    <Icon Name="book" />
+                    <div>
+                        <div class="callout-title">Read more</div>
+                        <ul>@foreach (var r in lesson.ReadMore) { <li class="small">@r</li> }</ul>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="pager">
+            @if (Previous is { } prev)
+            {
+                <a class="btn btn-ghost" href="lesson/@prev.Id"><Icon Name="arrow-left" Size="18" /> @prev.Title</a>
+            }
+            else { <span></span> }
+            <button class="btn btn-primary" @onclick="CompleteAndContinue">
+                @(Next is null ? "Complete & take the quiz" : done ? "Next lesson" : "Mark complete & continue") <Icon Name="arrow-right" Size="18" />
+            </button>
+        </div>
+    </article>
+}
+
+@code {
+    [Parameter] public string Id { get; set; } = "";
+
+    private (Level Level, Lesson Lesson, int Index)? Found => Curriculum.FindLesson(Id);
+
+    private Lesson? Previous => Neighbour(-1);
+
+    // "Next" stays inside the level, so the last lesson leads to that level's quiz.
+    private Lesson? Next => Found is { } f && f.Index + 1 < f.Level.Lessons.Count ? f.Level.Lessons[f.Index + 1] : null;
+
+    private Lesson? Neighbour(int offset)
+    {
+        var all = Curriculum.AllLessons;
+        var i = all.ToList().FindIndex(l => l.Id == Id) + offset;
+        return i >= 0 && i < all.Count ? all[i] : null;
+    }
+
+    private async Task CompleteAndContinue()
+    {
+        if (Found is not { } f) return;
+        await ProgressService.CompleteLessonAsync(f.Lesson.Id);
+        Nav.NavigateTo(Next is { } next ? $"lesson/{next.Id}" : $"quiz/{f.Level.Number}");
+    }
+}

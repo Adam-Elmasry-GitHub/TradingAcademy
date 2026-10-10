@@ -33,7 +33,7 @@ public sealed class QuizQuestion
     public string Explanation { get; set; } = "";
 }
 
-/// <summary>Loads the curriculum from the JSON files in Content/levels.</summary>
+/// <summary>Loads the curriculum (lessons and quizzes) from the level JSON files.</summary>
 public static class Curriculum
 {
     private static readonly JsonSerializerOptions Options = new()
@@ -43,15 +43,16 @@ public static class Curriculum
         AllowTrailingCommas = true,
     };
 
+    /// <summary>
+    /// Loads every level. With no folder given, the curriculum embedded in this assembly is used;
+    /// pass a folder to load edited JSON files from disk instead.
+    /// </summary>
     public static IReadOnlyList<Level> Load(string? directory = null)
     {
-        directory ??= Path.Combine(AppContext.BaseDirectory, "Content", "levels");
-        if (!Directory.Exists(directory))
-            throw new DirectoryNotFoundException($"Curriculum folder not found: {directory}");
-
-        var levels = Directory.GetFiles(directory, "level-*.json")
-            .Select(file => JsonSerializer.Deserialize<Level>(File.ReadAllText(file), Options)
-                            ?? throw new InvalidDataException($"Empty level file: {file}"))
+        var sources = directory is null ? EmbeddedLevels() : FileLevels(directory);
+        var levels = sources
+            .Select(source => JsonSerializer.Deserialize<Level>(source.Json, Options)
+                              ?? throw new InvalidDataException($"Empty level file: {source.Name}"))
             .OrderBy(level => level.Number)
             .ToList();
 
@@ -59,6 +60,23 @@ public static class Curriculum
             Validate(level);
 
         return levels;
+    }
+
+    private static IEnumerable<(string Name, string Json)> EmbeddedLevels()
+    {
+        var assembly = typeof(Curriculum).Assembly;
+        foreach (var name in assembly.GetManifestResourceNames().Where(n => n.StartsWith("TradingAcademy.Content.levels.level-")))
+        {
+            using var reader = new StreamReader(assembly.GetManifestResourceStream(name)!);
+            yield return (name, reader.ReadToEnd());
+        }
+    }
+
+    private static IEnumerable<(string Name, string Json)> FileLevels(string directory)
+    {
+        if (!Directory.Exists(directory))
+            throw new DirectoryNotFoundException($"Curriculum folder not found: {directory}");
+        return Directory.GetFiles(directory, "level-*.json").Select(file => (file, File.ReadAllText(file)));
     }
 
     private static void Validate(Level level)

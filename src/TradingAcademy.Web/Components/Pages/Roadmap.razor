@@ -1,0 +1,88 @@
+@page "/roadmap"
+@inherits ProgressPage
+
+<PageTitle>Roadmap · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">The path</div>
+    <h1>From beginner to professional</h1>
+    <p>Eight levels in three phases. Pass each level's quiz with @QuizEngine.PassPercent% or more to unlock the next one. Most people need 12 to 24 months of steady practice, and that is normal.</p>
+</div>
+
+<div class="timeline">
+    @foreach (var level in Curriculum.Levels)
+    {
+        if (Phases.TryGetValue(level.Number, out var phase))
+        {
+            <div class="phase-label"><span class="chip">@phase</span></div>
+        }
+        var status = LevelStatus(level);
+        var done = LessonsDone(level);
+        <div class="timeline-item @status fade-in">
+            <div class="timeline-dot">@if (status == "done") { <Icon Name="check" Size="18" /> } else { @level.Number }</div>
+            <div class="card">
+                <div class="level-card-head">
+                    <div>
+                        <div class="eyebrow">Level @level.Number · @level.Rank</div>
+                        <h2>@level.Name</h2>
+                    </div>
+                    <span class="chip chip-@status">
+                        @if (status == "locked") { <Icon Name="lock" Size="13" /> }
+                        @(status switch { "done" => "Completed", "open" => "Open", _ => "Locked" })
+                    </span>
+                </div>
+                <p class="muted" style="margin:0.25rem 0 0">@level.Goal</p>
+                <div class="level-meta">
+                    <span>⏱ @level.Duration</span>
+                    <span>📚 @done / @level.Lessons.Count lessons</span>
+                    <span>❓ @level.Quiz.Count questions@(Progress.BestQuizScores.TryGetValue(level.Number, out var best) ? $" · best {best:0}%" : "")</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill @(status == "done" ? "done" : "")" style="width:@Pct(100.0 * done / level.Lessons.Count)%"></div></div>
+                <details style="margin-top:0.9rem">
+                    <summary class="small muted" style="cursor:pointer">Topics and milestones</summary>
+                    <div class="grid grid-2" style="margin-top:0.75rem">
+                        <ul class="checklist small">
+                            @foreach (var lesson in level.Lessons)
+                            {
+                                <li><Icon Name="@(Progress.CompletedLessons.Contains(lesson.Id) ? "check" : "book")" Size="16" /> @lesson.Title</li>
+                            }
+                        </ul>
+                        <ul class="checklist small">
+                            @foreach (var m in level.Milestones)
+                            {
+                                <li><Icon Name="flag" Size="16" /> @m</li>
+                            }
+                        </ul>
+                    </div>
+                </details>
+                <div class="row" style="margin-top:1rem">
+                    <a class="btn btn-ghost btn-sm" href="learn/@level.Number">Lessons</a>
+                    @if (status == "locked")
+                    {
+                        <button class="btn btn-ghost btn-sm" disabled><Icon Name="lock" Size="15" /> Quiz locked</button>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-sm" href="quiz/@level.Number">@(status == "done" ? "Retake quiz" : "Take quiz")</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="timeline-item">
+        <div class="timeline-dot" style="background:linear-gradient(135deg,var(--primary),var(--up));border:0;color:#fff"><Icon Name="trophy" Size="18" /></div>
+        <div class="card" style="background:var(--hero-glow),var(--surface)">
+            <h2>Pro trader</h2>
+            <p class="muted" style="margin:0">Consistent, rule-based, risk-managed and journaled. You know your edge, your numbers and your limits.</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private static readonly Dictionary<int, string> Phases = new()
+    {
+        [0] = "Phase 1 · Learn the language",
+        [3] = "Phase 2 · Learn to survive",
+        [6] = "Phase 3 · Build an edge",
+    };
+}

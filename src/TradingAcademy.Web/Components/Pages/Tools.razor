@@ -1,0 +1,117 @@
+@page "/tools"
+
+<PageTitle>Trader's toolkit · Trading Academy</PageTitle>
+
+<div class="page-header">
+    <div class="eyebrow">Risk first</div>
+    <h1>Trader's toolkit</h1>
+    <p>The calculators a professional uses before every trade. Results update as you type.</p>
+</div>
+
+<div class="grid grid-2">
+    <div class="card stack">
+        <div class="row"><div class="stat-icon" style="margin:0"><Icon Name="shield" /></div><h3 style="margin:0">Position size</h3></div>
+        <div class="grid grid-2" style="gap:0.6rem">
+            <div class="field"><label>Account size</label><input class="input mono" inputmode="decimal" @bind="_account" @bind:event="oninput" /></div>
+            <div class="field"><label>Risk per trade %</label><input class="input mono" inputmode="decimal" @bind="_risk" @bind:event="oninput" /></div>
+            <div class="field"><label>Entry price</label><input class="input mono" inputmode="decimal" @bind="_entry" @bind:event="oninput" /></div>
+            <div class="field"><label>Stop-loss price</label><input class="input mono" inputmode="decimal" @bind="_stop" @bind:event="oninput" /></div>
+        </div>
+        @if (Try(() => RiskCalculator.PositionSize(N(_account), N(_risk), N(_entry), N(_stop))) is { } units)
+        {
+            <div class="callout success">
+                <div>
+                    <div class="stat-label">Buy or sell</div>
+                    <div class="stat-value mono">@units units</div>
+                    <div class="small muted">Position value @Num.Money(units * N(_entry)) · max loss ≈ @Num.Money(units * Math.Abs(N(_entry) - N(_stop))) plus fees</div>
+                </div>
+            </div>
+        }
+        else { <span class="faint small">Fill in all four fields.</span> }
+    </div>
+
+    <div class="card stack">
+        <div class="row"><div class="stat-icon" style="margin:0"><Icon Name="target" /></div><h3 style="margin:0">Reward-to-risk</h3></div>
+        <div class="grid grid-3" style="gap:0.6rem;grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">
+            <div class="field"><label>Entry</label><input class="input mono" inputmode="decimal" @bind="_rrEntry" @bind:event="oninput" /></div>
+            <div class="field"><label>Stop</label><input class="input mono" inputmode="decimal" @bind="_rrStop" @bind:event="oninput" /></div>
+            <div class="field"><label>Target</label><input class="input mono" inputmode="decimal" @bind="_rrTarget" @bind:event="oninput" /></div>
+        </div>
+        @if (Try(() => RiskCalculator.RewardToRisk(N(_rrEntry), N(_rrStop), N(_rrTarget))) is { } rr)
+        {
+            <div class="grid grid-2" style="gap:0.6rem">
+                <div class="indicator"><div class="stat-label">Reward : risk</div><div class="stat-value mono">@rr.ToString("0.00") : 1</div></div>
+                <div class="indicator"><div class="stat-label">Break-even win rate</div><div class="stat-value mono">@RiskCalculator.BreakEvenWinRate((double)rr).ToString("0.0")%</div></div>
+            </div>
+            <span class="muted small">You must win more often than this to make money on trades like this (before costs).</span>
+        }
+    </div>
+
+    <div class="card stack">
+        <div class="row"><div class="stat-icon" style="margin:0"><Icon Name="chart" /></div><h3 style="margin:0">Expectancy</h3></div>
+        <div class="grid grid-3" style="gap:0.6rem;grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">
+            <div class="field"><label>Win rate %</label><input class="input mono" inputmode="decimal" @bind="_winRate" @bind:event="oninput" /></div>
+            <div class="field"><label>Average win</label><input class="input mono" inputmode="decimal" @bind="_avgWin" @bind:event="oninput" /></div>
+            <div class="field"><label>Average loss</label><input class="input mono" inputmode="decimal" @bind="_avgLoss" @bind:event="oninput" /></div>
+        </div>
+        @{ var e = RiskCalculator.Expectancy((double)N(_winRate), (double)N(_avgWin), (double)N(_avgLoss)); }
+        <div class="callout @(e > 0 ? "success" : "warn")">
+            <div>
+                <div class="stat-label">Expected result per trade</div>
+                <div class="stat-value mono @(e > 0 ? "up" : "down")">@e.ToString("+0.00;-0.00")</div>
+                <div class="small muted">@(e > 0 ? "Positive edge: profitable over many trades." : "Negative edge: this loses money over time, however good it feels.")</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card stack">
+        <div class="row"><div class="stat-icon" style="margin:0"><Icon Name="sparkles" /></div><h3 style="margin:0">Kelly criterion</h3></div>
+        <div class="grid grid-2" style="gap:0.6rem">
+            <div class="field"><label>Win rate %</label><input class="input mono" inputmode="decimal" @bind="_kWin" @bind:event="oninput" /></div>
+            <div class="field"><label>Reward : risk</label><input class="input mono" inputmode="decimal" @bind="_kRr" @bind:event="oninput" /></div>
+        </div>
+        @if (N(_kRr) > 0)
+        {
+            var k = RiskCalculator.KellyFraction((double)N(_kWin), (double)N(_kRr)) * 100;
+            <div class="grid grid-3" style="gap:0.6rem;grid-template-columns:repeat(3,1fr)">
+                <div class="indicator"><div class="stat-label">Full</div><div class="num">@k.ToString("0.0")%</div></div>
+                <div class="indicator"><div class="stat-label">Half</div><div class="num">@((k / 2).ToString("0.0"))%</div></div>
+                <div class="indicator"><div class="stat-label">Quarter</div><div class="num">@((k / 4).ToString("0.0"))%</div></div>
+            </div>
+            <span class="muted small">Full Kelly is very volatile and assumes your numbers are exact. Most pros use a fraction, or cap risk at 0.5-2%.</span>
+        }
+    </div>
+</div>
+
+<div class="section card">
+    <h3>Drawdown recovery</h3>
+    <p class="muted small">Losses and gains are not symmetrical. This is why risk management comes first.</p>
+    <div class="stack" style="gap:0.55rem">
+        @foreach (var dd in new[] { 5, 10, 20, 30, 40, 50, 60, 75, 90 })
+        {
+            var need = RiskCalculator.RecoveryNeeded(dd);
+            <div class="row" style="flex-wrap:nowrap">
+                <span class="mono small" style="width:3.2rem">-@dd%</span>
+                <div class="progress-track" style="flex:1;height:12px">
+                    <div class="progress-fill" style="width:@Math.Min(100, need / 9).ToString("0.#", CultureInfo.InvariantCulture)%;background:@(dd >= 40 ? "var(--down)" : dd >= 20 ? "var(--warn)" : "var(--up)")"></div>
+                </div>
+                <span class="mono small" style="width:4.8rem;text-align:right">+@need.ToString("0.0")%</span>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private string _account = "10000", _risk = "1", _entry = "100", _stop = "95";
+    private string _rrEntry = "100", _rrStop = "95", _rrTarget = "112";
+    private string _winRate = "40", _avgWin = "250", _avgLoss = "100";
+    private string _kWin = "45", _kRr = "2";
+
+    private static decimal N(string? text) => Num.Parse(text) ?? 0;
+
+    private static decimal? Try(Func<decimal> calc)
+    {
+        try { return calc(); }
+        catch (ArgumentException) { return null; }
+    }
+}

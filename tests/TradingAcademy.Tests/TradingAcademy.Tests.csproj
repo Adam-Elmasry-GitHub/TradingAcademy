@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TradingAcademy\TradingAcademy.csproj" />
+    <ProjectReference Include="..\..\src\TradingAcademy.Core\TradingAcademy.Core.csproj" />
   </ItemGroup>
 
 </Project>
