@@ -1,5 +1,7 @@
 # 📈 Trading Academy
 
+[![build](https://github.com/Adam-Elmasry-GitHub/TradingAcademy/actions/workflows/build.yml/badge.svg)](https://github.com/Adam-Elmasry-GitHub/TradingAcademy/actions/workflows/build.yml)
+
 **Learn trading from absolute beginner to professional, in a C# console app.**
 
 Trading Academy is a free, open-source learning app written in C# (.NET 8). It combines a drawn **8-level roadmap**, **32 lessons**, **60 quiz questions**, a **paper-trading simulator** with live charts and indicators, a **trader's toolkit** of risk calculators, and a **trading journal**. Next to the app, the [`docs`](docs) folder contains a study guide for every level, a reading list of the best books and free courses, a glossary and ready-to-use templates.
@@ -46,7 +48,7 @@ The idea is simple: **learn → test → practise → review**, one level at a t
 **Requirements:** the [.NET 8 SDK](https://dotnet.microsoft.com/download) (or newer) on Windows, macOS or Linux.
 
 ```bash
-git clone https://github.com/AdamElmasry/TradingAcademy.git
+git clone https://github.com/Adam-Elmasry-GitHub/TradingAcademy.git
 cd TradingAcademy
 dotnet run --project src/TradingAcademy
 ```
