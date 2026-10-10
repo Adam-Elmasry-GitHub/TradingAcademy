@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Trading Academy</title>
+    <script>
+        // GitHub Pages has no server-side routing. Deep links such as /TradingAcademy/simulator land here,
+        // so remember the path and load the app, which restores it (see index.html).
+        sessionStorage.setItem('trading-academy:redirect', location.pathname + location.search + location.hash);
+        // The publish workflow rewrites this to the GitHub Pages path, e.g. /TradingAcademy/
+        location.replace('/');
+    </script>
+</head>
+<body></body>
+</html>

@@ -4,9 +4,13 @@
 
 **Learn trading from absolute beginner to professional, in a C# console app.**
 
-Trading Academy is a free, open-source learning app written in C# (.NET 8). It comes as a **modern, responsive web app** (Blazor) and as a **console app**, both built on the same core library. It combines a drawn **8-level roadmap**, **32 lessons**, **60 quiz questions**, a **paper-trading simulator** with live charts and indicators, a **trader's toolkit** of risk calculators, and a **trading journal**. Next to the app, the [`docs`](docs) folder contains a study guide for every level, a reading list of the best books and free courses, a glossary and ready-to-use templates.
+Trading Academy is a free, open-source learning app written in C# (.NET 8). It comes as a **modern, responsive web app** that runs in any browser and as a **console app**, both built on the same core library. It combines a drawn **8-level roadmap**, **32 lessons**, **60 quiz questions**, a **paper-trading simulator** with live charts and indicators, a **trader's toolkit** of risk calculators, and a **trading journal**. Next to the app, the [`docs`](docs) folder contains a study guide for every level, a reading list of the best books and free courses, a glossary and ready-to-use templates.
 
 The idea is simple: **learn → test → practise → review**, one level at a time. You unlock the next level by passing the quiz for the current one, and you practise every skill with fake money before real money is ever involved.
+
+### ▶ Try it now: **[adam-elmasry-github.github.io/TradingAcademy](https://adam-elmasry-github.github.io/TradingAcademy/)**
+
+Free, nothing to install, works on phones too. Your progress is saved in your browser.
 
 > ⚠️ **Educational use only. Nothing here is financial advice.** Trading involves substantial risk, and most retail traders lose money. Never trade with money you cannot afford to lose.
 
@@ -57,7 +61,7 @@ The idea is simple: **learn → test → practise → review**, one level at a t
 git clone https://github.com/Adam-Elmasry-GitHub/TradingAcademy.git
 cd TradingAcademy
 
-# Web app (recommended): then open the address it prints, e.g. http://localhost:5000
+# Web app: then open http://localhost:5264
 dotnet run --project src/TradingAcademy.Web
 
 # Console app
@@ -70,7 +74,7 @@ To open it in Visual Studio or Rider, open `TradingAcademy.sln`, choose `Trading
 
 ## The web app
 
-A Blazor Server app with a hand-made design system: no CSS framework, no JavaScript libraries.
+A Blazor WebAssembly app: the C# code runs inside the browser, so the whole site is static files that GitHub Pages hosts for free. Every push to `main` republishes it (`.github/workflows/pages.yml`). It uses a hand-made design system: no CSS framework, no JavaScript libraries.
 
 | | |
 |---|---|
@@ -192,7 +196,7 @@ Core reading list: Murphy, *Technical Analysis of the Financial Markets* · Thar
 ```
 TradingAcademy/
 ├── TradingAcademy.sln
-├── src/TradingAcademy.Web/        modern responsive web app (Blazor Server)
+├── src/TradingAcademy.Web/        modern responsive web app (Blazor WebAssembly, hosted on GitHub Pages)
 │   ├── Components/Layout/         app shell: sidebar, mobile menu, theme toggle
 │   ├── Components/Pages/          home, roadmap, lessons, quiz, simulator, tools, journal, progress
 │   ├── Components/Shared/         icons, SVG candlestick chart, helpers
@@ -218,12 +222,12 @@ TradingAcademy/
 │   │   └── AsciiChart.cs          candlestick chart for the terminal
 ├── tests/TradingAcademy.Tests/    xUnit tests for the maths, simulator, account and content
 ├── docs/                          roadmap, study guides, sources, glossary, templates
-└── .github/workflows/build.yml    CI: build and test on every push
+└── .github/workflows/             build.yml: build and test on every push · pages.yml: publish the website
 ```
 
 ## How it works (for developers)
 
-- **No external dependencies**: only .NET and ASP.NET Core. Tests use xUnit.
+- **No external dependencies**: only .NET and Blazor. Tests use xUnit.
 - **One core, two front ends.** All trading maths, the simulator and the curriculum live in `TradingAcademy.Core`. The web and console apps only handle presentation.
 - **Content is data.** Lessons and quizzes live in `src/TradingAcademy.Core/Content/levels/level-N.json`, so you can add or fix material without touching code. The loader validates every quiz answer index on startup.
 - **The trading engine is plain, testable C#.** `PaperAccount` uses `decimal` for money and keeps a signed position (positive = long, negative = short), a volume-weighted average price, realised trades and an equity curve. `MarketSimulator` is deterministic for a given seed.

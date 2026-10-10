@@ -1,43 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b1020" />
-    <base href="/" />
-    <title>Trading Academy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="stylesheet" href="app.css" />
-    <script>
-        // Apply the saved theme before the page paints, so there is no flash of the wrong colours.
-        try { const t = localStorage.getItem('trading-academy:theme'); if (t) document.documentElement.dataset.theme = t; } catch { }
-        window.taTheme = {
-            current() {
-                const t = document.documentElement.dataset.theme;
-                return t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-            },
-            toggle() {
-                const root = document.documentElement;
-                const dark = this.current() === 'dark';
-                root.dataset.theme = dark ? 'light' : 'dark';
-                try { localStorage.setItem('trading-academy:theme', root.dataset.theme); } catch { }
-                return root.dataset.theme;
-            }
-        };
-    </script>
-    <HeadOutlet @rendermode="InteractiveServer" />
-</head>
-
-<body>
-    <Routes @rendermode="InteractiveServer" />
-    <div id="blazor-error-ui">
-        Something went wrong. <a href="" class="reload">Reload</a>
-    </div>
-    <script src="_framework/blazor.web.js"></script>
-</body>
-
-</html>
+<Router AppAssembly="typeof(Program).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found · Trading Academy</PageTitle>
+        <LayoutView Layout="typeof(MainLayout)">
+            <div class="empty-state">
+                <h1>Page not found</h1>
+                <p class="muted">That page does not exist.</p>
+                <a class="btn btn-primary" href="">Go home</a>
+            </div>
+        </LayoutView>
+    </NotFound>
+</Router>

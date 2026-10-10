@@ -1,0 +1,47 @@
+name: publish website
+
+# Builds the web app and publishes it to GitHub Pages:
+# https://adam-elmasry-github.github.io/TradingAcademy/
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Publish the web app
+        run: dotnet publish src/TradingAcademy.Web -c Release -o publish
+      - name: Point the app at the GitHub Pages path
+        run: |
+          BASE="/${GITHUB_REPOSITORY#*/}/"
+          sed -i "s#<base href=\"/\" />#<base href=\"$BASE\" />#" publish/wwwroot/index.html
+          sed -i "s#location.replace('/');#location.replace('$BASE');#" publish/wwwroot/404.html
+          touch publish/wwwroot/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish/wwwroot
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

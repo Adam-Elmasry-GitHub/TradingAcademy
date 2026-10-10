@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="description" content="Learn trading from beginner to professional: roadmap, lessons, quizzes and a paper-trading simulator." />
+    <!-- The publish workflow rewrites this to the GitHub Pages path, e.g. /TradingAcademy/ -->
+    <base href="/" />
+    <title>Trading Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="app.css" />
+    <script>
+        // Apply the saved theme before the page paints, so there is no flash of the wrong colours.
+        try { const t = localStorage.getItem('trading-academy:theme'); if (t) document.documentElement.dataset.theme = t; } catch { }
+        window.taTheme = {
+            current() {
+                const t = document.documentElement.dataset.theme;
+                return t || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            },
+            toggle() {
+                const root = document.documentElement;
+                root.dataset.theme = this.current() === 'dark' ? 'light' : 'dark';
+                try { localStorage.setItem('trading-academy:theme', root.dataset.theme); } catch { }
+                return root.dataset.theme;
+            }
+        };
+        // GitHub Pages serves 404.html for deep links; it stores the path and redirects here (see 404.html).
+        (function () {
+            const redirect = sessionStorage.getItem('trading-academy:redirect');
+            if (redirect) { sessionStorage.removeItem('trading-academy:redirect'); history.replaceState(null, '', redirect); }
+        })();
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="boot">
+            <div class="brand-mark boot-mark">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 6-7" /></svg>
+            </div>
+            <div class="boot-title">Trading<strong>Academy</strong></div>
+            <div class="boot-bar"><div style="width: var(--blazor-load-percentage, 5%)"></div></div>
+            <noscript>Trading Academy needs JavaScript to run.</noscript>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        Something went wrong. <a href="" class="reload">Reload</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+</body>
+
+</html>
